@@ -1,7 +1,7 @@
 <script lang="ts">
   import LoginForm from "./LoginForm.svelte";
-
   import { userStore } from "./loginStore";
+  import UserInfo from "./UserInfo.svelte";
 
 </script>
 
@@ -9,8 +9,7 @@
 <br />
 
 {#if $userStore}
-<h2>Logged in as {$userStore.email}!!! c:</h2>
-<button on:click={userStore.logout}>Logout</button>
+<UserInfo />
 {:else}
   <LoginForm />
 {/if}

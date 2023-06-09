@@ -8,7 +8,7 @@ const auth = getAuth(app);
 const provider = new GoogleAuthProvider();
 
 function createUserStore() {
-    const { subscribe, set, update } = writable<User>();
+    const { subscribe, set, update } = writable<User| undefined>();
 
     async function login(email: string, pwd: string) {
         try {
