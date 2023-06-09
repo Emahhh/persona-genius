@@ -11,6 +11,10 @@ export let projects: Project[] = [
     { name: "Project 3", id: 3 },
 ];
 
+export function getProject(id: number): Project | undefined {
+    return projects.find((p) => p.id === id);
+}
+
 
 export const selectedProjectId = writable<number | undefined>(undefined);
 

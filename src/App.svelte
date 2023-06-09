@@ -5,12 +5,14 @@
   import ProjectArea from "./ProjectArea.svelte";
 </script>
 
-
-<br />
-
 {#if $userStore}
   <UserInfo />
   <ProjectArea />
 {:else}
   <LoginForm />
 {/if}
+
+<br />
+<!-- TODO: footer-->
+
+<br />

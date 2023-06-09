@@ -5,7 +5,7 @@
 
 <p> Apri un progetto, o creane uno nuovo.</p>
 <p> Progetto selezionato: {$selectedProjectId}</p>
-<div class="container">
+<div class="main-container grid">
     <div class="project new-project">+</div>
     {#each projects as project}
         <div
@@ -18,20 +18,6 @@
 </div>
 
 <style>
-    .container {
-        display: flex;
-        flex-wrap: wrap;
-        justify-content: flex-start;
-        align-items: flex-start;
-        width: 90%;
-        height: 80vh;
-        max-width: 800px;
-        margin: 0 auto;
-        background-color: #f2f2f2;
-        padding: 10px;
-        border-radius: 20px;
-    }
-
     .project {
         width: 120px;
         height: 120px;
@@ -44,6 +30,7 @@
         font-size: 16px;
         cursor: pointer;
         border-radius: 10px;
+        box-shadow: 0 0 4px rgba(0, 0, 0, 0.361);
         transition: box-shadow 0.3s ease; /* per l'hover */
     }
 
