@@ -5,7 +5,8 @@
 
 </script>
 
-<h1>Persona Genius </h1>
+
+
 <br />
 
 {#if $userStore}
