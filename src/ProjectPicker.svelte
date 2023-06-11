@@ -1,21 +1,27 @@
 <script lang="ts">
- import { projects, type Project} from "./projectStore";
-    import { selectedProjectId } from "./projectStore";
+    import DebugPanel from "./DebugPanel.svelte";
+    import {
+        projectsStore,
+        type Project,
+        selectedProjectId,
+    } from "./projectStore";
+    import { onMount } from "svelte";
+    import { get } from "svelte/store";
+    
+    
 </script>
 
-<p> Apri un progetto, o creane uno nuovo.</p>
-<p> Progetto selezionato: {$selectedProjectId}</p>
+<p>Apri un progetto, o creane uno nuovo.</p>
 <div class="main-container grid">
     <div class="project new-project">+</div>
-    {#each projects as project}
-        <div
-            class="project"
-            on:click={ () => selectedProjectId.set(project.id) }
-        >
-            {project.name}
+    {#each Object.entries($projectsStore) as [projectId, project]}
+        <div class="project" on:click={() => selectedProjectId.set(projectId)}>
+            {project.prjName}
         </div>
     {/each}
 </div>
+
+<DebugPanel />
 
 <style>
     .project {

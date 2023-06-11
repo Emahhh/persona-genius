@@ -1,22 +1,60 @@
+import { app } from "./firebaseConf";
 import { writable } from "svelte/store";
+import { getDatabase, ref, onValue } from "firebase/database";
 
+
+
+// INTERFACES
 export interface Project {
-    name: string;
-    id: number;
+    prjName: string;
+    owner: string;
+    userPersonas: Record<string, boolean>;
+    invitedUsers: Record<string, Invitation>;
 }
 
-export let projects: Project[] = [
-    { name: "Project 1", id: 1 },
-    { name: "Project 2", id: 2 },
-    { name: "Project 3", id: 3 },
-];
-
-export function getProject(id: number): Project | undefined {
-    return projects.find((p) => p.id === id);
+export interface Invitation {
+    status: string;
+    timestamp: string;
 }
 
+// STORES
+export const projectsStore = writable<Record<string, Project>>({});
+export const selectedProjectId = writable<string | undefined>(undefined);
+export const selectedProject = writable<Project | undefined>(undefined);
 
-export const selectedProjectId = writable<number | undefined>(undefined);
+// FIREBASE STUFF
 
+const rtDatabase = getDatabase(); // istanza del mio Real Time Database di Firebase
+
+const allProjectsRef = ref(rtDatabase, 'projects/'); // riferimento al nodo 'projects' del mio database
+
+onValue(allProjectsRef, (snapshot) => {
+    const unfilteredProjects = snapshot.val();
+    const filteredProjects = filterProjects(unfilteredProjects);
+    projectsStore.set(filteredProjects);
+});
+
+// when the selectedProjectId changes, update the selectedProject
+selectedProjectId.subscribe((newSelectedProjectId) => {
+    if (!newSelectedProjectId) {
+        selectedProject.set(undefined);
+        return;
+    }
+
+    const selectedProjectRef = ref(rtDatabase, `projects/${newSelectedProjectId}`);
+    onValue(selectedProjectRef, (snapshot) => {
+        const selectedProjectValue = snapshot.val();
+        selectedProject.set(selectedProjectValue);
+    }
+    );
+});
+
+
+// MANIPOLAZIONE DEI DATI
+
+function filterProjects(unfilteredProjects: any) {
+    // TODO: implementare la funzione che filtra i progetti in base all'utente loggato, che però deve già fare la rule di sicurezza
+    return unfilteredProjects;
+}
 
 
