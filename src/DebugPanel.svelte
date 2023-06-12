@@ -5,18 +5,20 @@
         selectedProject,
     } from "./projectStore";
 
-    export let debugMode = true;
+    export let DEBUGMODE = true; // METTERE A FALSE PER NASCONDERE IL PANNELLO DI DEBUG
+
     export let variables: any[] = []; // input
     export let varNames: string = ""; // input
 
-    let variableList = variables.map((variable, index) => ({
+    let variableList: { name: string; value: any; }[] = [];
+    $: variableList = variables.map((variable, index) => ({
         name: varNames.split(",")[index].trim(),
         value: variable,
     }));
     
 </script>
 
-{#if debugMode}
+{#if DEBUGMODE}
     <div class="debugDiv">
         {#each variableList as variable}
             <h3>{variable.name}</h3>
