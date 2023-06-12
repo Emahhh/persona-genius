@@ -8,8 +8,8 @@ import { getDatabase, ref, onValue } from "firebase/database";
 export interface Project {
     prjName: string;
     owner: string;
-    userPersonas: Persona[];
     invitedUsers: Record<string, Invitation>;
+    personas: Record<string, Persona>;
 }
 
 export interface Invitation {
@@ -18,7 +18,7 @@ export interface Invitation {
 }
 
 export interface Persona {
-    id: string;
+    // id: string; // attenzione, l'ID è dentro l'oggetto o fuori come record?
     name: string;
     description: string;
     goals: string;

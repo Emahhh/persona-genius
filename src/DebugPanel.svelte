@@ -1,18 +1,29 @@
 <script lang="ts">
-    import { projectsStore, selectedProjectId, selectedProject} from "./projectStore";
+    import {
+        projectsStore,
+        selectedProjectId,
+        selectedProject,
+    } from "./projectStore";
+
+    export let debugMode = true;
+    export let variables: any[] = []; // input
+    export let varNames: string = ""; // input
+
+    let variableList = variables.map((variable, index) => ({
+        name: varNames.split(",")[index].trim(),
+        value: variable,
+    }));
+    
 </script>
 
-<div class="debugDiv">
-    <p>ID Progetto selezionato: </p>
-    <pre>{$selectedProjectId}</pre>
-    <br />
-    <p>contenuto Progetto selezionato: </p>
-    <pre>{JSON.stringify($selectedProject, null, 4)}</pre>
-    <br />
-
-    <p>projectsStore:</p>
-    <pre>{JSON.stringify($projectsStore, null, 4)}</pre>
-</div>
+{#if debugMode}
+    <div class="debugDiv">
+        {#each variableList as variable}
+            <h3>{variable.name}</h3>
+            <pre>{JSON.stringify(variable.value, null, 4)}</pre>
+        {/each}
+    </div>
+{/if}
 
 <style>
     .debugDiv {
