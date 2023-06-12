@@ -8,13 +8,26 @@ import { getDatabase, ref, onValue } from "firebase/database";
 export interface Project {
     prjName: string;
     owner: string;
-    userPersonas: Record<string, boolean>;
+    userPersonas: Persona[];
     invitedUsers: Record<string, Invitation>;
 }
 
 export interface Invitation {
     status: string;
     timestamp: string;
+}
+
+export interface Persona {
+    id: string;
+    name: string;
+    description: string;
+    goals: string;
+    needs: string;
+    frustrations: string;
+    image: string;
+    job: string;
+    // TODO: inserire per ordinare? lastEdit: string;
+    // TODO: chat?
 }
 
 // STORES
