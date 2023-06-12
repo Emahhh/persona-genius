@@ -7,8 +7,6 @@
     } from "./projectStore";
     import { onMount } from "svelte";
     import { get } from "svelte/store";
-    
-    
 </script>
 
 <p>Apri un progetto, o creane uno nuovo.</p>
@@ -16,7 +14,9 @@
     <div class="project new-project">+</div>
     {#each Object.entries($projectsStore) as [projectId, project]}
         <div class="project" on:click={() => selectedProjectId.set(projectId)}>
-            {project.prjName}
+            <span class="projectName">{project.prjName}</span>
+            <br />
+            <span class="createdBy">Created by <br/> <b>{project.owner}</b></span>
         </div>
     {/each}
 </div>
@@ -25,11 +25,12 @@
 
 <style>
     .project {
-        width: 120px;
-        height: 120px;
+        width: 200px;
+        height: 200px;
         background-color: #ccc;
         margin: 5px;
         display: flex;
+        flex-direction: column;
         justify-content: center;
         align-items: center;
         font-weight: bold;
@@ -42,6 +43,15 @@
 
     .project:hover {
         box-shadow: 0 0 10px rgba(0, 0, 0, 0.523);
+    }
+
+    .projectName {
+        margin-bottom: 5px;
+    }
+
+    .createdBy {
+        font-size: 10px;
+        font-weight: normal;
     }
 
     .new-project {

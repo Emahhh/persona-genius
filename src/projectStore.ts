@@ -53,7 +53,8 @@ selectedProjectId.subscribe((newSelectedProjectId) => {
 // MANIPOLAZIONE DEI DATI
 
 function filterProjects(unfilteredProjects: any) {
-    // TODO: implementare la funzione che filtra i progetti in base all'utente loggato, che però deve già fare la rule di sicurezza
+    // TODO: implementare politica di sicurezza nel realtime database
+    // TODO: implementare la funzione che filtra i progetti in base all'utente loggato, se ce ne sono in più, è un errore - il database dovrebbe restituire solo i progetti su cui l'utente ha diritto
     return unfilteredProjects;
 }
 
