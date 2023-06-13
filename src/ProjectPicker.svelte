@@ -9,22 +9,38 @@
     import { get } from "svelte/store";
 </script>
 
-<p>Apri un progetto, o creane uno nuovo.</p>
+<div class="panelTitle">
+    <h4>Project Picker: Apri un progetto, o creane uno nuovo.</h4>
+</div>
+
 <div class="main-container grid">
     <div class="project new-project">+</div>
+
     {#each Object.entries($projectsStore) as [projectId, project]}
+        <!-- svelte-ignore a11y-click-events-have-key-events -->
         <div class="project" on:click={() => selectedProjectId.set(projectId)}>
             <span class="projectName">{project.prjName}</span>
             <br />
-            <span class="createdBy">Created by <br/> <b>{project.owner}</b></span>
+            <span class="createdBy"
+                >Created by <br /> <b>{project.owner}</b></span
+            >
         </div>
     {/each}
+    
 </div>
 
-<DebugPanel variables={[$selectedProjectId]} varNames={"$selectedProjectId"}  />
-
+<DebugPanel variables={[$selectedProjectId]} varNames={"$selectedProjectId"} />
 
 <style>
+    .panelTitle {
+        margin-bottom: 10px;
+        margin-top: 20px;
+        justify-content: center;
+        display: flex;
+    }
+    .panelTitle h4 {
+        margin-bottom: 5px;
+    }
     .project {
         width: 200px;
         height: 200px;
