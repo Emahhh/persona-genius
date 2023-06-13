@@ -1,25 +1,57 @@
 <script lang="ts">
-    import { userStore } from './loginStore';
-    
+    import { userStore } from "./loginStore";
+
     let email = "";
     let pwd = "";
-
 </script>
 
-<div class="form-container">
-    <h1>Login</h1>
-    <form on:submit|preventDefault>
-        <label for="username">Username:</label>
-        <input id="username" bind:value={email} type="text" />
-        <br />
-        <label for="pwd">Password:</label>
-        <input id="pwd" bind:value={pwd} type="password" />
+<div class="big-container">
+    <article class="form-container">
+        <h1>Login</h1>
+        <form on:submit|preventDefault>
+            <div>
+                <label for="username">Username:</label>
+                <input id="username" type="email" bind:value={email} required />
+            </div>
+            <div>
+                <label for="password">Password:</label>
+                <input
+                    id="password"
+                    type="password"
+                    bind:value={pwd}
+                    required
+                />
+            </div>
 
-        <br />
-        
-        <button on:click={() => userStore.login(email, pwd)}> Login </button>
-        <!-- TODO: sign up? -->
-        <hr>
-        <button on:click={userStore.googleLogin}>Google</button>
-    </form>
+            <div>
+                <button
+                    type="submit"
+                    on:click={() => userStore.login(email, pwd)}>Login</button
+                >
+                <!-- TODO: implementa sign up? Meglio portare ad un'altra schermata?
+                <button type="button" on:click={() => userStore.signUp(email, pwd)}>Sign Up</button>  
+            -->
+            </div>
+            <hr />
+            <div>
+                <!-- GOOGLE LOGIN-->
+                <button type="button" on:click={userStore.googleLogin}
+                    >Login with Google</button
+                >
+            </div>
+        </form>
+    </article>
 </div>
+
+<style>
+    .form-container {
+        min-width: 350px;
+        max-width: 900px;
+    }
+    .big-container {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 100vh;
+    }
+</style>

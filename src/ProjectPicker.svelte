@@ -21,7 +21,8 @@
     {/each}
 </div>
 
-<DebugPanel />
+<DebugPanel variables={[$selectedProjectId]} varNames={"$selectedProjectId"}  />
+
 
 <style>
     .project {
