@@ -15,7 +15,7 @@
 
 <div class="main-container grid">
     <div class="project new-project">+</div>
-
+    
     {#each Object.entries($projectsStore) as [projectId, project]}
         <!-- svelte-ignore a11y-click-events-have-key-events -->
         <div class="project" on:click={() => selectedProjectId.set(projectId)}>

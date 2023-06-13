@@ -1,20 +1,27 @@
 <script lang="ts">
     import DebugPanel from "./DebugPanel.svelte";
-    import { selectedProjectId, selectedProject, type Persona} from "./projectStore";
+    import {
+        selectedProjectId,
+        selectedProject,
+        type Persona,
+    } from "./projectStore";
     import { onMount } from "svelte";
 
     let selectedPersonaId: string | undefined = undefined;
     let selectedPersona: Persona | undefined = undefined;
 
-    $: if ($selectedProject?.personas && selectedPersonaId) {  // reactive statement
-        selectedPersona = $selectedProject.personas[selectedPersonaId]; // quando cambia la persona selezionata, cambia anche l'oggetto persona
+    $: if ($selectedProject?.personas && selectedPersonaId) {
+        // reactive statement: quando cambia la persona selezionata, cambia anche l'oggetto persona selezionato
+        selectedPersona = $selectedProject.personas[selectedPersonaId];
     }
 
-    
-    
     onMount(() => {
-        if ($selectedProject?.personas && Object.keys($selectedProject.personas).length > 0) {
-            selectedPersonaId = Object.keys($selectedProject.personas)[0]; // Imposta la prima persona come selezionata all'avvio
+        // all'avvio, Imposta la prima persona come selezionata
+        if (
+            $selectedProject?.personas &&
+            Object.keys($selectedProject.personas).length > 0
+        ) {
+            selectedPersonaId = Object.keys($selectedProject.personas)[0];
         }
     });
 
@@ -23,46 +30,43 @@
     }
 </script>
 
-<button
-    style="width: 75%; align-self: center; margin: 0 auto;"
-    on:click={() => selectedProjectId.set(undefined)}
->
-    Back to project picker
-</button>
 
-<h2>This is the project Editor for project number: {$selectedProjectId}</h2>
-<!-- TODO: add button to edit the project: owner, invites ecc-->
+
+
+
+<div class="panel-bar">
+    <button    class="back-button"  on:click={() => selectedProjectId.set(undefined)}  >    Back to project picker     </button> <!-- TODO: add back icon-->
+    <h5>This is the project Editor for project number: {$selectedProjectId}</h5>
+    <!-- TODO: add button to edit the project: owner, invites ecc-->
+</div>
 
 {#if $selectedProjectId === undefined || $selectedProject === undefined}
-    <h2>No project selected - error</h2>
-{:else}
+    <h2>error: No project selected</h2>
+
+{:else} <!-- EDITOR AREA--------------------------------------------------->
     <div class="main-container grid">
         <div class="persona-list">
-
-
-
-
-
-            <div class="column">  <!-- PARTE SINISTRA, CHE SI OCCUPA DI MOSTRARE LA LISTA DELLE PERSONE E DI GESTIRE LA SELEZIONE ----------------------------------------- -->
+            <div class="column"><!-- PARTE SINISTRA, CHE SI OCCUPA DI MOSTRARE LA LISTA DELLE PERSONE E DI GESTIRE LA SELEZIONE ----------------------------------------- -->
+                
                 {#if $selectedProject.personas}
                     {#each Object.entries($selectedProject.personas) as [currentPersonaId, currentPersona]}
-                    <!-- svelte-ignore a11y-click-events-have-key-events -->
-                    <div
-                        class="persona-item {selectedPersonaId === currentPersonaId
-                            ? 'selected'
-                            : ''}"
-                        on:click={() => selectPersona(currentPersonaId)}
-                    >
-                        <img src={currentPersona.image}/> 
-                        <span>{currentPersona.name}</span>
-                    </div>
+                        <!-- svelte-ignore a11y-click-events-have-key-events -->
+                        <div
+                            class="persona-item {selectedPersonaId ===currentPersonaId? 'selected': ''}"
+                            on:click={() => selectPersona(currentPersonaId)}
+                        >
+                            <img src={currentPersona.image} />
+                            <span>{currentPersona.name}</span>
+                        </div>
                     {/each}
+
                 {:else}
-                    <p>Non ci sono ancora persone associate a questo progetto. Crea la prima!</p>
+                    <p>
+                        Non ci sono ancora persone associate a questo progetto.
+                        Crea la prima!
+                    </p>
                 {/if}
             </div>
-
-
 
 
 
@@ -71,24 +75,48 @@
                     <h3>Dettagli Persona</h3>
                     <p><strong>Nome:</strong> {selectedPersona.name}</p>
                     <p><strong>Job:</strong> {selectedPersona.job}</p>
-                    <p><strong>Descrizione:</strong> {selectedPersona.description}</p>
+                    <p>
+                        <strong>Descrizione:</strong>
+                        {selectedPersona.description}
+                    </p>
                     <p><strong>Goals:</strong> {selectedPersona.goals}</p>
                     <p><strong>Needs:</strong> {selectedPersona.needs}</p>
-                    <p><strong>Frustrations:</strong> {selectedPersona.frustrations}</p>
-
+                    <p>
+                        <strong>Frustrations:</strong>
+                        {selectedPersona.frustrations}
+                    </p>
                 </div>
             {/if}
-
-
-
-
         </div>
     </div>
 {/if}
 
+
+
 <DebugPanel variables={[selectedPersonaId, selectedPersona, $selectedProjectId, $selectedProject]} varNames={"selectedPersonaId, selectedPersona, $selectedProjectId, $selectedProject"}  />
 
+
+
+
 <style>
+    .panel-bar {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 10px;
+        background-color: #def3c9a8;
+        box-shadow: 0 0 10px 0 #9dbde06f;
+        width: 80%;
+        margin: auto;
+        margin-top: 30px;
+        border-radius: 10px;
+    }
+
+    .back-button {
+        width: 300px;
+        font-size: 1.2em;
+        margin: 0;
+    }
     .persona-list {
         display: flex;
         overflow: hidden;
@@ -116,7 +144,6 @@
         transition: background-color 0.3s;
     }
 
-
     .persona-item img {
         width: 40px;
         height: 40px;
@@ -125,8 +152,6 @@
         background-color: #ccc; /* Aggiungi lo sfondo */
         box-shadow: 0 0 5px 0 #9dbde06f;
     }
-
-
 
     .selected {
         background-color: #9dbde06f;
