@@ -32,6 +32,12 @@
     function selectPersona(personaId: string) {
         selectedPersonaId = personaId;
     }
+
+    // salva il progetto nel database, dopo averlo editato
+    function savePersona() {
+        editMode = false;
+        editProject($selectedProjectId, $selectedProject) 
+    }
 </script>
 
 
@@ -81,10 +87,7 @@
                     {#if editMode}
                         <div class="persona-bar">
                             <h3>Modifica Persona</h3>
-                            <button class="edit-button" on:click={()=> {
-                                editMode = false;
-                                editProject($selectedProjectId, $selectedProject) // salva il progetto modificato nel database
-                                }}>Save</button>
+                            <button class="edit-button" on:click={() => savePersona()}>Save</button>
                         </div>
                         
                         <p>Questo è il form per modificare la persona {selectedPersona.name}</p>
