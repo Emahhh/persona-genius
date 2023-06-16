@@ -40,15 +40,17 @@
 
 <div class="panel-bar">
     <button    class="back-button"  on:click={() => selectedProjectId.set(undefined)}  >    Back to project picker     </button> <!-- TODO: add back icon-->
-    <h5>This is the project Editor for project number: {$selectedProjectId}</h5>
-    <!-- TODO: add button to edit the project: owner, invites ecc-->
+    <h5>This is the project Editor for project number: {$selectedProject?.prjName}</h5>
+
+    <!-- TODO: add button to edit the project: owner, invites ecc. Idea: link ad un div che sta sotto al project editor-->
+    <button> Edit project info</button>
 </div>
 
 {#if $selectedProjectId === undefined || $selectedProject === undefined}
     <h2>error: No project selected</h2>
 
-{:else} <!-- EDITOR AREA--------------------------------------------------->
-    <div class="main-container grid container">
+{:else} 
+    <div class="main-container container"> <!-- EDITOR AREA--------------------------------------------------->
         <div class="persona-area">
             <div class="column"><!-- PARTE SINISTRA, CHE SI OCCUPA DI MOSTRARE LA LISTA DELLE PERSONE E DI GESTIRE LA SELEZIONE ----------------------------------------- -->
                 
@@ -118,6 +120,17 @@
                 </div>
             {/if}
         </div>
+    </div>
+
+
+    <!-- PROJECT INFO AREA--------------------------------------------------->
+    <div class="contaier">
+        <form>
+            <label>Project Name</label>
+            <input type="text" bind:value={$selectedProject.prjName}> 
+
+
+        </form>
     </div>
 {/if}
 

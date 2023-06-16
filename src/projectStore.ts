@@ -63,19 +63,25 @@ selectedProjectId.subscribe((newSelectedProjectId) => {
     );
 });
 
+
+
+// SETTERS -------
+
 // aggiorna il nodo 'projects' con dati nuovi
-export function editProject(projectId: string | undefined, newProject:  Project | undefined) {
+export async function editProject(projectId: string | undefined, newProject: Project | undefined) {
     if (!projectId || projectId === '' || !newProject) {
         console.error('editProject: missing projectId or newProject. Cannot edit project.');
         return;
     }
     const projectRef: DatabaseReference = ref(rtDatabase, `projects/${projectId}`);
-    set(projectRef, newProject).then(() => {
+
+    try {
+        await set(projectRef, newProject);
         console.log('Project edited successfully.');
-    }).catch((error) => {
-        console.error('Project editing failed: ', error);
-        alert('Project editing failed. See console for details.');  // TODO: gestire meglio l'errore
-    });
+    } catch (error) {
+        console.error('Project editing failed: ', error); // TODO: gestire meglio l'errore
+    }
+
 }
 
 
