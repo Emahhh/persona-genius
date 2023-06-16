@@ -1,9 +1,11 @@
 <script lang="ts">
+    import { get } from "firebase/database";
     import DebugPanel from "./DebugPanel.svelte";
     import {
         selectedProjectId,
         selectedProject,
         type Persona,
+        editProject,
     } from "./projectStore";
     import { onMount } from "svelte";
 
@@ -77,14 +79,25 @@
                     {#if editMode}
                         <div class="persona-bar">
                             <h3>Modifica Persona</h3>
-                            <button class="edit-button" on:click={() => editMode = false}>Save</button>
+                            <button class="edit-button" on:click={()=> {
+                                editMode = false;
+                                editProject($selectedProjectId, $selectedProject) // salva il progetto modificato nel database
+                                }}>Save</button>
                         </div>
                         
-                        <p>TODO: form per modificare la persona {selectedPersona.name}</p>
+                        <p>Questo è il form per modificare la persona {selectedPersona.name}</p>
+                        <form>
+                            <label>Name</label>
+                            <input type="text" bind:value={selectedPersona.name} autocomplete="off" />
+                            <label>Job</label>
+                            <input type="text" bind:value={selectedPersona.job} autocomplete="off" />
+                            <!-- TODO: il resto-->
+                        </form>
 
 
 
-                    {:else}
+
+                    {:else} <!-- EDIT MODE OFF -->
                         <button class="edit-button" on:click={() => editMode = true}>Edit</button>
 
                         <h3>Dettagli Persona</h3>
