@@ -13,7 +13,7 @@
     <h4>Project Picker: Apri un progetto, o creane uno nuovo.</h4>
 </div>
 
-<div class="main-container grid">
+<div class="main-container container"> <!-- TODO: sostituire con CSS migliore -->
     <div class="project new-project">+</div>
     
     {#each Object.entries($projectsStore) as [projectId, project]}
@@ -45,7 +45,7 @@
         width: 200px;
         height: 200px;
         background-color: #ccc;
-        margin: 5px;
+        margin: 10px;
         display: flex;
         flex-direction: column;
         justify-content: center;

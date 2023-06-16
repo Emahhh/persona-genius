@@ -10,6 +10,8 @@
     let selectedPersonaId: string | undefined = undefined;
     let selectedPersona: Persona | undefined = undefined;
 
+    let editMode:boolean = false;
+
     $: if ($selectedProject?.personas && selectedPersonaId) {
         // reactive statement: quando cambia la persona selezionata, cambia anche l'oggetto persona selezionato
         selectedPersona = $selectedProject.personas[selectedPersonaId];
@@ -44,8 +46,8 @@
     <h2>error: No project selected</h2>
 
 {:else} <!-- EDITOR AREA--------------------------------------------------->
-    <div class="main-container grid">
-        <div class="persona-list">
+    <div class="main-container grid container">
+        <div class="persona-area">
             <div class="column"><!-- PARTE SINISTRA, CHE SI OCCUPA DI MOSTRARE LA LISTA DELLE PERSONE E DI GESTIRE LA SELEZIONE ----------------------------------------- -->
                 
                 {#if $selectedProject.personas}
@@ -72,19 +74,34 @@
 
             {#if selectedPersona} <!-- PARTE DESTRA, CHE SI OCCUPA DI MOSTRARE I DETTAGLI DELLA PERSONA SELEZIONATA E EDITOR ----------------------------------------- -->
                 <div class="editor-area">
-                    <h3>Dettagli Persona</h3>
-                    <p><strong>Nome:</strong> {selectedPersona.name}</p>
-                    <p><strong>Job:</strong> {selectedPersona.job}</p>
-                    <p>
-                        <strong>Descrizione:</strong>
-                        {selectedPersona.description}
-                    </p>
-                    <p><strong>Goals:</strong> {selectedPersona.goals}</p>
-                    <p><strong>Needs:</strong> {selectedPersona.needs}</p>
-                    <p>
+                    {#if editMode}
+                        <div class="persona-bar">
+                            <h3>Modifica Persona</h3>
+                            <button class="edit-button" on:click={() => editMode = false}>Save</button>
+                        </div>
+                        
+                        <p>TODO: form per modificare la persona {selectedPersona.name}</p>
+
+
+
+                    {:else}
+                        <button class="edit-button" on:click={() => editMode = true}>Edit</button>
+
+                        <h3>Dettagli Persona</h3>
+                        <p><strong>Nome:</strong> {selectedPersona.name}</p>
+                        <p><strong>Job:</strong> {selectedPersona.job}</p>
+                        <p>
+                            <strong>Descrizione:</strong>
+                            {selectedPersona.description}
+                        </p>
+                        <p><strong>Goals:</strong> {selectedPersona.goals}</p>
+                        <p><strong>Needs:</strong> {selectedPersona.needs}</p>
+                        <p>
                         <strong>Frustrations:</strong>
                         {selectedPersona.frustrations}
                     </p>
+                    {/if}
+                    
                 </div>
             {/if}
         </div>
@@ -117,18 +134,18 @@
         font-size: 1.2em;
         margin: 0;
     }
-    .persona-list {
+    .persona-area {
         display: flex;
         overflow: hidden;
-        width: 100vh; /* TODO: NON DOvrebbe essere 100% ???*/
-        height: 100vh;
+        width: 100%; 
+        height: 100%;
     }
 
     .column {
         padding: 10px;
         background-color: #def3c9;
         width: 30%;
-        height: 100%;
+        height: 100vh;
         overflow-y: auto;
         box-shadow: 0 0 10px 0 #9dbde06f;
     }
@@ -161,6 +178,19 @@
     .editor-area {
         padding: 10px;
         padding-left: 25px;
-        width: 70%; /* TODO: sure? strano che debba imporre il complementare della colonna */
+        width: 100vh; /* TODO: sure? */
+    }
+
+    .edit-button{
+        /* in alto a dx*/
+        width: 100px; /* TODO: rendere responsive*/
+    }
+
+    .persona-bar {
+        display: flex;
+    
+        width: 100%;
+        margin-bottom: 20px;
+        border-bottom: 1px solid #ccc;
     }
 </style>
