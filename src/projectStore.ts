@@ -1,18 +1,20 @@
 import { app } from "./firebaseConf";
 import { writable } from "svelte/store";
 import { getDatabase, ref, onValue, set, type DatabaseReference } from "firebase/database";
-
+import DEBUGMODE from "./DebugPanel.svelte";
 
 
 // INTERFACES
 export interface Project {
     prjName: string;
     owner: string;
+    prjDescription: string;
     invitedUsers: Record<string, Invitation>;
     personas: Record<string, Persona>;
 }
 
 export interface Invitation {
+    invitedUserId: string;
     status: string;
     timestamp: string;
 }
@@ -67,8 +69,13 @@ selectedProjectId.subscribe((newSelectedProjectId) => {
 
 // SETTERS -------
 
-// aggiorna il nodo 'projects' con dati nuovi
+// TODO: aggiornare solo la singola persona in realtime? con "applying your changes" e "your changes are up to date"?
+
+// aggiorna il nodo 'projects' con dati nuovi 
 export async function editProject(projectId: string | undefined, newProject: Project | undefined) {
+
+    if(DEBUGMODE) console.log('funzione chiamata con valori editProject(', projectId, ',', newProject, ')');
+
     if (!projectId || projectId === '' || !newProject) {
         console.error('editProject: missing projectId or newProject. Cannot edit project.');
         return;
@@ -84,8 +91,30 @@ export async function editProject(projectId: string | undefined, newProject: Pro
 
 }
 
+// edit project info
+export async function editProjectInfo(projectId: string | undefined, newProjectInfo: Project | undefined) {
+    if (!projectId || projectId === '' || !newProjectInfo || !newProjectInfo.prjName || !newProjectInfo.prjDescription) {
+        console.error('editProjectInfo: missing projectId or newProjectInfo. Cannot edit project.');
+        return;
+    }
+    const prjNameRef: DatabaseReference = ref(rtDatabase, `projects/${projectId}/prjName`);
+    const prjDescriptionRef: DatabaseReference = ref(rtDatabase, `projects/${projectId}/prjDescription`);
 
-// MANIPOLAZIONE DEI DATI
+    try {
+        await set(prjNameRef, newProjectInfo.prjName);
+        await set(prjDescriptionRef, newProjectInfo.prjDescription);
+        console.log('Project info edited successfully.');
+    } catch (error) {
+        console.error('Project info editing failed: ', error);
+    }
+}
+
+
+
+
+
+
+// MANIPOLAZIONE DEI DATI-------------------
 
 function filterProjects(unfilteredProjects: any) {
     // TODO: implementare politica di sicurezza nel realtime database
