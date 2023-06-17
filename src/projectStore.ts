@@ -109,6 +109,23 @@ export async function editProjectInfo(projectId: string | undefined, newProjectI
     }
 }
 
+// delete project
+export async function deleteProject(projectId: string | undefined) {
+    if (!projectId || projectId === '') {
+        console.error('deleteProject: missing projectId. Cannot delete project.');
+        return;
+    }
+
+    const projectRef: DatabaseReference = ref(rtDatabase, `projects/${projectId}`);
+
+    try {
+        await set(projectRef, null); //TODO: sure?
+        console.log('Project deleted successfully.');
+    } catch (error) {
+        console.error('Project deletion failed: ', error);
+    }
+}
+
 
 
 

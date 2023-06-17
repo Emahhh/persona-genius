@@ -1,6 +1,7 @@
 <script lang="ts">
     import { get } from "firebase/database";
     import DebugPanel from "./DebugPanel.svelte";
+    import ProjectInfoEditor from "./ProjectInfoEditor.svelte";
     import {
         selectedProjectId,
         selectedProject,
@@ -40,12 +41,6 @@
         editMode = false;
         editProject($selectedProjectId, $selectedProject) 
     }
-
-
-    function cancelEditInfo(): void {
-        infoEditMode = false;
-        // TODO: ripristina i valori originali
-    }
 </script>
 
 
@@ -56,7 +51,6 @@
     <button    class="back-button"  on:click={() => selectedProjectId.set(undefined)}  >    Back to project picker     </button> <!-- TODO: add back icon-->
     <h5>This is the project Editor for project number: {$selectedProject?.prjName}</h5>
 
-    <!-- TODO: add button to edit the project: owner, invites ecc. Idea: link ad un div che sta sotto al project editor-->
     <button on:click={() => infoEditMode = true}> Edit project info</button>
 </div>
 
@@ -134,38 +128,10 @@
     </div>
 
 
-    <!-- PROJECT INFO AREA--------------------------------------------------->
-{#if infoEditMode}
-    <dialog open> 
-        <article class="project-info-editor">
-            <h3>Edit project information</h3>
-            <p>
-                Edit your stuff here
-            </p>
-            <form>
-                <label>Project Name</label>
-                <input type="text" bind:value={$selectedProject.prjName}>
-
-                <label>Project Description</label>
-                <textarea bind:value={$selectedProject.prjDescription}></textarea>
-            </form>
-            <hr>
-            <p> Invited people:</p>
-            <p>Invited people:</p>
-            <ul>
-                {#each Object.values($selectedProject.invitedUsers) as invitation}
-                    <li>{invitation.invitedUserId}, {invitation.status}</li> <!-- TODO: sostituire con il suo username-->
-                {/each}
-        </ul>
-        
-        <p>Invite someone else...</p> <!--TODO:--> 
-            <footer>
-                <a href="#cancel" role="button" class="secondary" on:click={()=> cancelEditInfo()}>Cancel</a>
-                <a role="button" on:click={()=> editProjectInfo($selectedProjectId, $selectedProject)}>Confirm and save</a>
-            </footer>
-        </article>
-    </dialog>
-{/if}
+    {#if infoEditMode} <!-- EDITOR MODAL --------------------------------------------------->
+        <!-- TODO: triggherarlo se il progetto si chiama ancora "new project" -->
+        <ProjectInfoEditor bind:infoEditMode={infoEditMode}/>
+    {/if}
 
 {/if}
 
