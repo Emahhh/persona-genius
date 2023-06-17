@@ -6,6 +6,7 @@
         selectedProject,
         type Persona,
         editProject,
+        editProjectInfo,
     } from "./projectStore";
     import { onMount } from "svelte";
 
@@ -13,6 +14,7 @@
     let selectedPersona: Persona | undefined = undefined;
 
     let editMode:boolean = false;
+    let infoEditMode:boolean = false;
 
     $: if ($selectedProject?.personas && selectedPersonaId) {
         // reactive statement: quando cambia la persona selezionata, cambia anche l'oggetto persona selezionato
@@ -33,10 +35,16 @@
         selectedPersonaId = personaId;
     }
 
-    // salva il progetto nel database, dopo averlo editato
+    // salva il progetto nel database, dopo averlo editato TODO: farlo in realtime?
     function savePersona() {
         editMode = false;
         editProject($selectedProjectId, $selectedProject) 
+    }
+
+
+    function cancelEditInfo(): void {
+        infoEditMode = false;
+        // TODO: ripristina i valori originali
     }
 </script>
 
@@ -49,7 +57,7 @@
     <h5>This is the project Editor for project number: {$selectedProject?.prjName}</h5>
 
     <!-- TODO: add button to edit the project: owner, invites ecc. Idea: link ad un div che sta sotto al project editor-->
-    <button> Edit project info</button>
+    <button on:click={() => infoEditMode = true}> Edit project info</button>
 </div>
 
 {#if $selectedProjectId === undefined || $selectedProject === undefined}
@@ -127,14 +135,38 @@
 
 
     <!-- PROJECT INFO AREA--------------------------------------------------->
-    <div class="contaier">
-        <form>
-            <label>Project Name</label>
-            <input type="text" bind:value={$selectedProject.prjName}> 
+{#if infoEditMode}
+    <dialog open> 
+        <article class="project-info-editor">
+            <h3>Edit project information</h3>
+            <p>
+                Edit your stuff here
+            </p>
+            <form>
+                <label>Project Name</label>
+                <input type="text" bind:value={$selectedProject.prjName}>
 
+                <label>Project Description</label>
+                <textarea bind:value={$selectedProject.prjDescription}></textarea>
+            </form>
+            <hr>
+            <p> Invited people:</p>
+            <p>Invited people:</p>
+            <ul>
+                {#each Object.values($selectedProject.invitedUsers) as invitation}
+                    <li>{invitation.invitedUserId}, {invitation.status}</li> <!-- TODO: sostituire con il suo username-->
+                {/each}
+        </ul>
+        
+        <p>Invite someone else...</p> <!--TODO:--> 
+            <footer>
+                <a href="#cancel" role="button" class="secondary" on:click={()=> cancelEditInfo()}>Cancel</a>
+                <a role="button" on:click={()=> editProjectInfo($selectedProjectId, $selectedProject)}>Confirm and save</a>
+            </footer>
+        </article>
+    </dialog>
+{/if}
 
-        </form>
-    </div>
 {/if}
 
 
@@ -221,5 +253,10 @@
         width: 100%;
         margin-bottom: 20px;
         border-bottom: 1px solid #ccc;
+    }
+
+    .project-info-editor {
+        width: 85%;
+        max-width: 800px;
     }
 </style>

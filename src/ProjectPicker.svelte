@@ -4,9 +4,31 @@
         projectsStore,
         type Project,
         selectedProjectId,
+        editProject,
     } from "./projectStore";
+    import { userStore } from "./loginStore";
     import { onMount } from "svelte";
     import { get } from "svelte/store";
+
+
+    function newProject(): void { 
+        if (!get(userStore)?.uid) {
+            console.log("Error: user undefined.");
+            return;
+        }
+
+        const newProjectId = crypto.randomUUID();
+        const newProject: Project = {
+            prjName: "New Project",
+            owner: get(userStore)!.uid,
+            personas: {},
+            prjDescription: "A wonderful new service that will change the world.",
+            invitedUsers: {}
+        };
+
+        editProject(newProjectId, newProject);
+        console.log("new project id: ", newProjectId);
+    }
 </script>
 
 <div class="panelTitle">
@@ -14,7 +36,7 @@
 </div>
 
 <div class="main-container container"> <!-- TODO: sostituire con CSS migliore -->
-    <div class="project new-project">+</div>
+    <div class="project new-project" on:click={() => newProject()}>+</div>
     
     {#each Object.entries($projectsStore) as [projectId, project]}
         <!-- svelte-ignore a11y-click-events-have-key-events -->
