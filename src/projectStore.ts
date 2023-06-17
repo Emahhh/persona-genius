@@ -126,6 +126,23 @@ export async function deleteProject(projectId: string | undefined) {
     }
 }
 
+// set persona
+export async function setPersona(projectId: string | undefined, personaId: string | undefined, newPersona: Persona | undefined) {
+    if (!projectId || projectId === '' || !personaId || personaId === '' || !newPersona) {
+        console.error('setPersona: missing projectId or personaId or newPersona. Cannot set persona.');
+        return;
+    }
+
+    const personaRef: DatabaseReference = ref(rtDatabase, `projects/${projectId}/personas/${personaId}`);
+
+    try {
+        await set(personaRef, newPersona);
+        console.log('Persona set successfully.');
+    } catch (error) {
+        console.error('Persona setting failed: ', error);
+    }
+}
+
 
 
 

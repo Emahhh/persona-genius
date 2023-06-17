@@ -8,6 +8,7 @@
         type Persona,
         editProject,
         editProjectInfo,
+        setPersona,
     } from "./projectStore";
     import { onMount } from "svelte";
 
@@ -41,18 +42,45 @@
         editMode = false;
         editProject($selectedProjectId, $selectedProject) 
     }
+
+
+    function handleCreateNewPersona(): void {
+        if (!$selectedProject){
+            console.error("error: no project selected");
+            return;
+        }
+
+        // crea una nuova persona vuota e la aggiunge al progetto
+        // TODO: genera con AI
+        const myNewPersona: Persona = {
+            name: "New Persona",
+            job: "",
+            description: "",
+            goals: "",
+            needs: "",
+            frustrations: "",
+            image: "",
+        };
+
+        const newPersonaId = crypto.randomUUID();
+
+        setPersona($selectedProjectId, newPersonaId, myNewPersona);
+
+        selectedPersonaId = newPersonaId;
+    }
 </script>
 
 
 
 
 
-<div class="panel-bar">
-    <button    class="back-button"  on:click={() => selectedProjectId.set(undefined)}  >    Back to project picker     </button> <!-- TODO: add back icon-->
-    <h5>This is the project Editor for project number: {$selectedProject?.prjName}</h5>
+<header class="panel-bar">
+    <a role="button" href="#"    class="back-button secondary"  on:click={() => selectedProjectId.set(undefined)}  >    Back to project picker     </a> <!-- TODO: add back icon-->
+    <a role="button" href="#" on:click={() => infoEditMode = true}> Edit project info</a>
+    <br />
+    <h5>This is the project Editor for {$selectedProject?.prjName}</h5>
 
-    <button on:click={() => infoEditMode = true}> Edit project info</button>
-</div>
+</header>
 
 {#if $selectedProjectId === undefined || $selectedProject === undefined}
     <h2>error: No project selected</h2>
@@ -61,7 +89,9 @@
     <div class="main-container container"> <!-- EDITOR AREA--------------------------------------------------->
         <div class="persona-area">
             <div class="column"><!-- PARTE SINISTRA, CHE SI OCCUPA DI MOSTRARE LA LISTA DELLE PERSONE E DI GESTIRE LA SELEZIONE ----------------------------------------- -->
-                
+                <div class="persona-item add-new-persona" on:click={() => handleCreateNewPersona()}>
+                    + Add new persona
+                </div>
                 {#if $selectedProject.personas}
                     {#each Object.entries($selectedProject.personas) as [currentPersonaId, currentPersona]}
                         <!-- svelte-ignore a11y-click-events-have-key-events -->
@@ -76,7 +106,7 @@
 
                 {:else}
                     <p>
-                        Non ci sono ancora persone associate a questo progetto.
+                        Non ci sono ancora persone in questo progetto.
                         Crea la prima!
                     </p>
                 {/if}
@@ -206,6 +236,11 @@
         padding: 10px;
         padding-left: 25px;
         width: 100vh; /* TODO: sure? */
+    }
+
+    .add-new-persona {
+        font-weight: bold;
+        background-color: #175b086f;
     }
 
     .edit-button{
