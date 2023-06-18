@@ -2,35 +2,7 @@ import { app } from "./firebaseConf";
 import { writable } from "svelte/store";
 import { getDatabase, ref, onValue, set, type DatabaseReference } from "firebase/database";
 import DEBUGMODE from "./DebugPanel.svelte";
-
-
-// INTERFACES
-export interface Project {
-    prjName: string;
-    owner: string;
-    prjDescription: string;
-    invitedUsers: Record<string, Invitation>;
-    personas: Record<string, Persona>;
-}
-
-export interface Invitation {
-    invitedUserId: string;
-    status: string;
-    timestamp: string;
-}
-
-export interface Persona {
-    // id: string; // attenzione, l'ID è dentro l'oggetto o fuori come record?
-    name: string;
-    description: string;
-    goals: string;
-    needs: string;
-    frustrations: string;
-    image: string;
-    job: string;
-    // TODO: inserire per ordinare? lastEdit: string;
-    // TODO: chat?
-}
+import type { Project, Persona, Invitation } from "./interfaces";
 
 // STORES
 export const projectsStore = writable<Record<string, Project>>({});

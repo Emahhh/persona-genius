@@ -1,17 +1,21 @@
 <script lang="ts">
-        import {
+    import {
         selectedProjectId,
         selectedProject,
-        type Persona,
         editProjectInfo,
         deleteProject,
     } from "./projectStore";
 
     export let infoEditMode: boolean;
 
-function cancelEditInfo(): void {
+    function cancelEditInfo(): void {
         infoEditMode = false;
         // TODO: ripristina i valori originali
+    }
+
+    function handleConfirmEdit(): any {
+        editProjectInfo($selectedProjectId, $selectedProject);
+        infoEditMode = false;
     }
 
 
@@ -65,7 +69,7 @@ function cancelEditInfo(): void {
             <button class="delete-button" on:click={()=> handleDeleteProject($selectedProjectId)}>Delete project</button> <!-- TODO: aggiungere un sistema di conferma-->
             <footer>
                 <a role="button" href="#" class="secondary" on:click={()=> cancelEditInfo()}>Cancel</a>
-                <a role="button" href="#" on:click={()=> editProjectInfo($selectedProjectId, $selectedProject)}>Confirm and save</a>
+                <a role="button" href="#" on:click={()=> handleConfirmEdit()}>Confirm and save</a>
             </footer>
         </article>
     </dialog>

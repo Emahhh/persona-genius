@@ -2,13 +2,13 @@
     import DebugPanel from "./DebugPanel.svelte";
     import {
         projectsStore,
-        type Project,
         selectedProjectId,
         editProject,
     } from "./projectStore";
     import { userStore } from "./loginStore";
     import { onMount } from "svelte";
     import { get } from "svelte/store";
+    import type { Project } from "./interfaces";
 
 
     function newProject(): void { 

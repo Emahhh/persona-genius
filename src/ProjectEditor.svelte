@@ -5,18 +5,20 @@
     import {
         selectedProjectId,
         selectedProject,
-        type Persona,
         editProject,
         editProjectInfo,
         setPersona,
     } from "./projectStore";
     import { onMount } from "svelte";
+    import type { Persona } from "./interfaces";
 
     let selectedPersonaId: string | undefined = undefined;
     let selectedPersona: Persona | undefined = undefined;
 
     let editMode:boolean = false;
     let infoEditMode:boolean = false;
+
+    let jsonPersona: string = "";
 
     $: if ($selectedProject?.personas && selectedPersonaId) {
         // reactive statement: quando cambia la persona selezionata, cambia anche l'oggetto persona selezionato
@@ -38,7 +40,7 @@
     }
 
     // salva il progetto nel database, dopo averlo editato TODO: farlo in realtime?
-    function savePersona() {
+    function handleSavePersona() {
         editMode = false;
         editProject($selectedProjectId, $selectedProject) 
     }
@@ -119,7 +121,7 @@
                     {#if editMode}
                         <div class="persona-bar">
                             <h3>Modifica Persona</h3>
-                            <button class="edit-button" on:click={() => savePersona()}>Save</button>
+                            <button class="edit-button" on:click={() => handleSavePersona()}>Save</button>
                         </div>
                         
                         <p>Questo è il form per modificare la persona {selectedPersona.name}</p>
@@ -129,6 +131,8 @@
                             <label>Job</label>
                             <input type="text" bind:value={selectedPersona.job} autocomplete="off" />
                             <!-- TODO: il resto-->
+                            <label>Import persona from JSON</label>
+                            <textarea bind:value={jsonPersona} />
                         </form>
 
 
