@@ -1,6 +1,6 @@
 import { app } from "./firebaseConf";
 import { writable } from "svelte/store";
-import { getDatabase, ref, onValue, set, type DatabaseReference } from "firebase/database";
+import { getDatabase, ref, onValue, set, get, type DatabaseReference } from "firebase/database";
 import DEBUGMODE from "./DebugPanel.svelte";
 import type { Project, Persona, Invitation } from "./interfaces";
 
@@ -15,7 +15,7 @@ const rtDatabase = getDatabase(); // istanza del mio Real Time Database di Fireb
 
 const allProjectsRef = ref(rtDatabase, 'projects/'); // riferimento al nodo 'projects' del mio database
 
-// quando il nodo 'projects' cambia, aggiorna il mio store con i dati aggiornati
+// quando il nodo 'projects' cambia, aggiorna il mio store con i dati aggiornati 
 onValue(allProjectsRef, (snapshot) => {
     const unfilteredProjects = snapshot.val();
     const filteredProjects = filterProjects(unfilteredProjects);
@@ -36,6 +36,33 @@ selectedProjectId.subscribe((newSelectedProjectId) => {
     }
     );
 });
+
+
+
+// ONE TIME GETTER (in addition to the realtime one)
+export function getProject(projectId: string | undefined): Promise<Project | undefined> {
+    if (!projectId || projectId === '') {
+        console.error('getProject: missing projectId. Cannot get project.');
+        return Promise.resolve(undefined);
+    }
+
+    const projectRef: DatabaseReference = ref(rtDatabase, `projects/${projectId}`);
+
+    return get(projectRef)
+        .then((snapshot) => {
+            if (snapshot.exists()) {
+                console.log('getProject: returning', JSON.stringify(snapshot.val()));
+                return snapshot.val();
+            } else {
+                console.error('getProject: no data available');
+                return undefined;
+            }
+        })
+        .catch((error) => {
+            console.error('getProject: error getting data:', error);
+            return undefined;
+        });
+}
 
 
 

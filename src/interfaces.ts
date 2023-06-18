@@ -25,3 +25,22 @@ export interface Persona {
     // TODO: inserire per ordinare? lastEdit: string;
     // TODO: chat?
 }
+
+// VALIDATION
+export function validatePersona(pers: Persona): boolean {
+    if (!pers.name || !pers.description || !pers.goals || !pers.needs || !pers.frustrations || !pers.image || !pers.job) {
+        return false;
+    }
+    return true;
+}
+
+// JSON TO OBJECT
+export function jsonToPersona(json: string): Persona {
+    const objPersona = JSON.parse(json);
+    console.log(objPersona);
+    if (!validatePersona(objPersona)) {
+        throw new Error("Invalid persona");
+    }
+    return objPersona;
+}
+

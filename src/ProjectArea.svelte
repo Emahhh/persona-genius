@@ -1,12 +1,12 @@
 <script lang="ts">
     import ProjectPicker from "./ProjectPicker.svelte";
-    import { selectedProjectId } from "./projectStore";
+    import { selectedProjectId, selectedProject} from "./projectStore";
     import ProjectEditor from "./ProjectEditor.svelte";
 
 </script>
 
-{#if $selectedProjectId}
+{#if $selectedProjectId && $selectedProject}
     <ProjectEditor /> <!-- TODO: give the project id as a prop -->
-{:else if $selectedProjectId === undefined}
+{:else}
     <ProjectPicker />
 {/if}

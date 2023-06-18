@@ -8,9 +8,11 @@
         editProject,
         editProjectInfo,
         setPersona,
+        getProject,
     } from "./projectStore";
     import { onMount } from "svelte";
     import type { Persona } from "./interfaces";
+    import {jsonToPersona} from "./interfaces";
 
     let selectedPersonaId: string | undefined = undefined;
     let selectedPersona: Persona | undefined = undefined;
@@ -18,12 +20,12 @@
     let editMode:boolean = false;
     let infoEditMode:boolean = false;
 
-    let jsonPersona: string = "";
 
     $: if ($selectedProject?.personas && selectedPersonaId) {
         // reactive statement: quando cambia la persona selezionata, cambia anche l'oggetto persona selezionato
         selectedPersona = $selectedProject.personas[selectedPersonaId];
     }
+
 
     onMount(() => {
         // all'avvio, Imposta la prima persona come selezionata
@@ -39,18 +41,29 @@
         selectedPersonaId = personaId;
     }
 
-    // salva il progetto nel database, dopo averlo editato TODO: farlo in realtime?
-    function handleSavePersona() {
-        editMode = false;
-        editProject($selectedProjectId, $selectedProject) 
-    }
 
+    // salva il progetto nel database, dopo averlo editato TODO: farlo in realtime?
+    let jsonPersona: string = "";
+    function handleSavePersona() {
+        if (jsonPersona && jsonPersona !== "") { // IMPORT PERSONA FROM JSON, if there is one
+            try {
+                selectedPersona = jsonToPersona(jsonPersona);
+            } catch (e) {
+                console.error("error parsing jsonPersona: ", e);
+                alert ("error parsing jsonPersona: " + e);
+            }
+        }
+
+        setPersona($selectedProjectId, selectedPersonaId, selectedPersona);
+        editMode = false;
+    }
 
     function handleCreateNewPersona(): void {
         if (!$selectedProject){
             console.error("error: no project selected");
             return;
-        }
+        }            
+
 
         // crea una nuova persona vuota e la aggiunge al progetto
         // TODO: genera con AI
@@ -70,6 +83,19 @@
 
         selectedPersonaId = newPersonaId;
     }
+
+    // resets the changes by reloading the unedited project from the database
+    // TODO: use it in the cancel project editor button
+    async function handleCancel(): Promise<void> {
+        try {
+            let oldProject = await getProject($selectedProjectId);
+            $selectedProject = oldProject;
+            editMode = false;
+        } catch (error) {
+            console.error("Error fetching project:", error);
+        }
+    }
+
 </script>
 
 
@@ -86,6 +112,8 @@
 
 {#if $selectedProjectId === undefined || $selectedProject === undefined}
     <h2>error: No project selected</h2>
+    Debug info: $selectedProjectId: {$selectedProjectId} <br />
+    $selectedProject: {$selectedProject}
 
 {:else} 
     <div class="main-container container"> <!-- EDITOR AREA--------------------------------------------------->
@@ -122,6 +150,7 @@
                         <div class="persona-bar">
                             <h3>Modifica Persona</h3>
                             <button class="edit-button" on:click={() => handleSavePersona()}>Save</button>
+                            <button class="edit-button secondary" on:click={() => handleCancel()}>Cancel</button>
                         </div>
                         
                         <p>Questo è il form per modificare la persona {selectedPersona.name}</p>
