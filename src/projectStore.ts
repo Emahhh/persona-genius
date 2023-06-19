@@ -66,6 +66,7 @@ export function getProject(projectId: string | undefined): Promise<Project | und
 
 
 
+
 // SETTERS -------
 
 // TODO: aggiornare solo la singola persona in realtime? con "applying your changes" e "your changes are up to date"?

@@ -4,13 +4,20 @@
         selectedProject,
         editProjectInfo,
         deleteProject,
+        getProject,
     } from "./projectStore";
 
     export let infoEditMode: boolean;
 
-    function cancelEditInfo(): void {
-        infoEditMode = false;
-        // TODO: ripristina i valori originali
+    // resets the changes by reloading the unedited project from the database
+    export async function cancelEditInfo(): Promise<void> {
+        try {
+            let oldProject = await getProject($selectedProjectId);
+            $selectedProject = oldProject;
+            infoEditMode = false;
+        } catch (error) {
+            console.error("Error fetching project:", error);
+        }
     }
 
     function handleConfirmEdit(): any {

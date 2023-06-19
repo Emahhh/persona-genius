@@ -85,8 +85,7 @@
     }
 
     // resets the changes by reloading the unedited project from the database
-    // TODO: use it in the cancel project editor button
-    async function handleCancel(): Promise<void> {
+    export async function handleCancel(): Promise<void> {
         try {
             let oldProject = await getProject($selectedProjectId);
             $selectedProject = oldProject;
@@ -95,6 +94,7 @@
             console.error("Error fetching project:", error);
         }
     }
+
 
 </script>
 
