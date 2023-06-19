@@ -35,7 +35,7 @@
     <h4>Project Picker: Apri un progetto, o creane uno nuovo.</h4>
 </div>
 
-<div class="main-container container"> <!-- TODO: sostituire con CSS migliore -->
+<div class="main-container grid"> <!-- TODO: sostituire con CSS migliore -->
     <div class="project new-project" on:click={() => newProject()}>+</div>
     
     {#each Object.entries($projectsStore) as [projectId, project]}
@@ -54,6 +54,9 @@
 <DebugPanel variables={[$selectedProjectId]} varNames={"$selectedProjectId"} />
 
 <style>
+    :root{
+        --project-width: 200px;
+    }
     .panelTitle {
         margin-bottom: 10px;
         margin-top: 20px;
@@ -63,9 +66,15 @@
     .panelTitle h4 {
         margin-bottom: 5px;
     }
+
+
+    .grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(var(--project-width), 1fr)); /* TODO: sostituire con CSS migliore */
+    }
     .project {
-        width: 200px;
-        height: 200px;
+        width: var(--project-width);
+        height: var(--project-width);
         background-color: #ccc;
         margin: 10px;
         display: flex;
