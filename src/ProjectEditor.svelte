@@ -9,6 +9,7 @@
         editProjectInfo,
         setPersona,
         getProject,
+        deletePersona,
     } from "./projectStore";
     import { onMount } from "svelte";
     import type { Persona } from "./interfaces";
@@ -17,27 +18,33 @@
     let selectedPersonaId: string | undefined = undefined;
     let selectedPersona: Persona | undefined = undefined;
 
-    let editMode:boolean = false;
+    let editPersonaMode:boolean = false;
     let infoEditMode:boolean = false;
 
 
     $: if ($selectedProject?.personas && selectedPersonaId) {
         // reactive statement: quando cambia la persona selezionata, cambia anche l'oggetto persona selezionato
         selectedPersona = $selectedProject.personas[selectedPersonaId];
+    }else{
+        selectedPersona = undefined;
     }
 
 
     onMount(() => {
-        // all'avvio, Imposta la prima persona come selezionata
+        selectPersona(getFirstPersonaId());
+    });
+
+    function getFirstPersonaId(): string | undefined {
         if (
             $selectedProject?.personas &&
             Object.keys($selectedProject.personas).length > 0
         ) {
-            selectedPersonaId = Object.keys($selectedProject.personas)[0];
+            return Object.keys($selectedProject.personas)[0];
         }
-    });
+        return undefined;
+    }
 
-    function selectPersona(personaId: string) {
+    function selectPersona(personaId: string | undefined) {
         selectedPersonaId = personaId;
     }
 
@@ -55,7 +62,7 @@
         }
 
         setPersona($selectedProjectId, selectedPersonaId, selectedPersona);
-        editMode = false;
+        editPersonaMode = false;
     }
 
     function handleCreateNewPersona(): void {
@@ -74,7 +81,7 @@
             goals: "",
             needs: "",
             frustrations: "",
-            image: "",
+            image: "https://www.w3schools.com/howto/img_avatar.png",
         };
 
         const newPersonaId = crypto.randomUUID();
@@ -89,11 +96,24 @@
         try {
             let oldProject = await getProject($selectedProjectId);
             $selectedProject = oldProject;
-            editMode = false;
+            editPersonaMode = false;
         } catch (error) {
             console.error("Error fetching project:", error);
         }
     }
+
+    // deletes the persona from the project
+    function handleDeletePersona(projectId: string | undefined, personaId: string | undefined): void {
+        if (!confirm(`Are you sure you want to delete this persona named "${selectedPersona?.name}" from this project?`)) {
+            return;
+        }
+        deletePersona(projectId, personaId);
+
+        selectPersona(getFirstPersonaId());
+        editPersonaMode = false;
+    }
+
+
 
 
 </script>
@@ -146,7 +166,8 @@
 
             {#if selectedPersona} <!-- PARTE DESTRA, CHE SI OCCUPA DI MOSTRARE I DETTAGLI DELLA PERSONA SELEZIONATA E EDITOR ----------------------------------------- -->
                 <div class="editor-area">
-                    {#if editMode}
+
+                    {#if editPersonaMode} <!-- EDIT PERSONA MODE ON -->
                         <div class="persona-bar">
                             <h3>Modifica Persona</h3>
                             <button class="edit-button" on:click={() => handleSavePersona()}>Save</button>
@@ -162,13 +183,15 @@
                             <!-- TODO: il resto-->
                             <label>Import persona from JSON</label>
                             <textarea bind:value={jsonPersona} />
+
+                            <button class="delete-button" on:click={() => handleDeletePersona($selectedProjectId, selectedPersonaId)}>Delete this persona</button>
                         </form>
 
 
 
 
                     {:else} <!-- EDIT MODE OFF -->
-                        <button class="edit-button" on:click={() => editMode = true}>Edit</button>
+                        <button class="edit-button" on:click={() => editPersonaMode = true}>Edit</button>
 
                         <h3>Dettagli Persona</h3>
                         <p><strong>Nome:</strong> {selectedPersona.name}</p>
@@ -292,5 +315,9 @@
     .project-info-editor {
         width: 85%;
         max-width: 800px;
+    }
+
+    .delete-button {
+        background-color: #c30000;
     }
 </style>

@@ -51,7 +51,7 @@ export function getProject(projectId: string | undefined): Promise<Project | und
     return get(projectRef)
         .then((snapshot) => {
             if (snapshot.exists()) {
-                console.log('getProject: returning', JSON.stringify(snapshot.val()));
+               // console.log('getProject: returning', JSON.stringify(snapshot.val()));
                 return snapshot.val();
             } else {
                 console.error('getProject: no data available');
@@ -123,6 +123,22 @@ export async function deleteProject(projectId: string | undefined) {
         console.log('Project deleted successfully.');
     } catch (error) {
         console.error('Project deletion failed: ', error);
+    }
+}
+
+// delete persona
+export async function deletePersona(projectId: string | undefined, personaId: string | undefined) {
+    if (!projectId || projectId === '' || !personaId || personaId === '') {
+        console.error('deletePersona: missing projectId or personaId. Cannot delete persona.');
+        return;
+    }
+
+    const personaRef: DatabaseReference = ref(rtDatabase, `projects/${projectId}/personas/${personaId}`);
+    try{
+        await set(personaRef, null);
+        console.log('Persona deleted successfully.');
+    } catch (error) {
+        console.error('Persona deletion failed: ', error);
     }
 }
 

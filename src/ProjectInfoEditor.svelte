@@ -27,6 +27,10 @@
 
 
     function handleDeleteProject($selectedProjectId: string | undefined): any {
+        if (!confirm("Are you sure you want to delete this project named " + $selectedProject?.prjName + "?")) {
+            return;
+        }
+
         if (!$selectedProjectId) {
             console.error("Error while deleting project: no project selected");
             return;
@@ -73,7 +77,7 @@
             <p>Invite someone else...</p> <!--TODO:--> 
 
             <hr>
-            <button class="delete-button" on:click={()=> handleDeleteProject($selectedProjectId)}>Delete project</button> <!-- TODO: aggiungere un sistema di conferma-->
+            <button class="delete-button" on:click={()=> handleDeleteProject($selectedProjectId)}>Delete project</button> 
             <footer>
                 <a role="button" href="#" class="secondary" on:click={()=> cancelEditInfo()}>Cancel</a>
                 <a role="button" href="#" on:click={()=> handleConfirmEdit()}>Confirm and save</a>
