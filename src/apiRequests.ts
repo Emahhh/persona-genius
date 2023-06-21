@@ -1,14 +1,16 @@
 import axios from 'axios';
 import { type Persona, jsonToPersona, validatePersona } from './interfaces';
 
+const baseURL = 'http://127.0.0.1:5001/saw-prova/us-central1/';
+
 export async function generatePersona(description: string): Promise<Persona> {
     try {
         const options = {
             method: 'POST',
-            url: 'http://127.0.0.1:5001/saw-prova/us-central1/generatePersona',
+            url: baseURL + 'generatePersona',
             headers: {'Content-Type': 'application/json'},
             data: {
-              description: description
+                description: description
             }
         };
 
