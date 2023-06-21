@@ -39,7 +39,9 @@ selectedProjectId.subscribe((newSelectedProjectId) => {
 
 
 
-// ONE TIME GETTER (in addition to the realtime one)
+// ONE TIME GETTERS ----
+
+// GETPROJECT (in addition to the realtime one)
 export function getProject(projectId: string | undefined): Promise<Project | undefined> {
     if (!projectId || projectId === '') {
         console.error('getProject: missing projectId. Cannot get project.');
@@ -63,6 +65,8 @@ export function getProject(projectId: string | undefined): Promise<Project | und
             return undefined;
         });
 }
+
+
 
 
 

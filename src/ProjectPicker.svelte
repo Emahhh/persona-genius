@@ -4,11 +4,13 @@
         projectsStore,
         selectedProjectId,
         editProject,
+        
     } from "./projectStore";
     import { userStore } from "./loginStore";
     import { onMount } from "svelte";
     import { get } from "svelte/store";
     import type { Project } from "./interfaces";
+    import { getUsername } from "./usersStore";
 
 
     function newProject(): void { 
@@ -38,14 +40,20 @@
 <div class="main-container grid"> <!-- TODO: sostituire con CSS migliore -->
     <div class="project new-project" on:click={() => newProject()}>+</div>
     
-    {#each Object.entries($projectsStore) as [projectId, project]}
+    {#each Object.entries($projectsStore) as [projectId, project]} <!-- TODO: show loading? -->
         <!-- svelte-ignore a11y-click-events-have-key-events -->
         <div class="project" on:click={() => selectedProjectId.set(projectId)}>
             <span class="projectName">{project.prjName}</span>
             <br />
-            <span class="createdBy"
-                >Created by <br /> <b>{project.owner}</b></span
-            >
+
+            {#await getUsername(project.owner)}
+                <span class="loading">Loading...</span> <!--TODO: remove message while loading and while error so that its nicer-->
+            {:then username}
+                <span class="createdBy">Created by<br /><b>{username}</b></span> <!-- TODO: check if created by ME-->
+            {:catch error}
+                <span class="error">Error: {error.message}</span>
+            {/await}
+
         </div>
     {/each}
     
