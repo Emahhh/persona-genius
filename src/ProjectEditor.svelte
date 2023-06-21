@@ -12,14 +12,16 @@
         deletePersona,
     } from "./projectStore";
     import { onMount } from "svelte";
-    import type { Persona } from "./interfaces";
-    import {jsonToPersona} from "./interfaces";
+    import {jsonToPersona, type Persona, } from "./interfaces";
+    import { generatePersona } from "./apiRequests";
 
     let selectedPersonaId: string | undefined = undefined;
     let selectedPersona: Persona | undefined = undefined;
 
     let editPersonaMode:boolean = false;
     let infoEditMode:boolean = false;
+
+    let isLoading:boolean = false;
 
 
     $: if ($selectedProject?.personas && selectedPersonaId) {
@@ -65,30 +67,31 @@
         editPersonaMode = false;
     }
 
-    function handleCreateNewPersona(): void {
+
+    // crea una nuova persona vuota e la aggiunge al progetto
+    async function handleCreateNewPersona(): Promise<void> {
         if (!$selectedProject){
             console.error("error: no project selected");
             return;
         }            
 
+        isLoading = true;
+        // TODO: sistema genera con AI
+        let myNewPersona : Persona | undefined = undefined;
 
-        // crea una nuova persona vuota e la aggiunge al progetto
-        // TODO: genera con AI
-        const myNewPersona: Persona = {
-            name: "New Persona",
-            job: "",
-            description: "",
-            goals: "",
-            needs: "",
-            frustrations: "",
-            image: "https://www.w3schools.com/howto/img_avatar.png",
-        };
+        try {
+            myNewPersona = await generatePersona($selectedProject.prjDescription);
+        } catch (e) {
+            console.error("error generating persona: ", e);
+            alert ("error generating persona: " + e);
+            isLoading = false;
+            return;
+        }
 
         const newPersonaId = crypto.randomUUID();
-
         setPersona($selectedProjectId, newPersonaId, myNewPersona);
-
         selectedPersonaId = newPersonaId;
+        isLoading = false;
     }
 
     // resets the changes by reloading the unedited project from the database
@@ -139,9 +142,17 @@
     <div class="main-container container"> <!-- EDITOR AREA--------------------------------------------------->
         <div class="persona-area">
             <div class="column"><!-- PARTE SINISTRA, CHE SI OCCUPA DI MOSTRARE LA LISTA DELLE PERSONE E DI GESTIRE LA SELEZIONE ----------------------------------------- -->
-                <div class="persona-item add-new-persona" on:click={() => handleCreateNewPersona()}>
-                    + Add new persona
-                </div>
+
+                {#if isLoading}
+                    <div class="persona-item add-new-persona" aria-busy="true">
+                        + Add new persona
+                    </div>
+                {:else}
+                    <div class="persona-item add-new-persona" on:click={() => handleCreateNewPersona() }>
+                        + Add new persona
+                    </div>
+                {/if}
+
                 {#if $selectedProject.personas}
                     {#each Object.entries($selectedProject.personas) as [currentPersonaId, currentPersona]}
                         <!-- svelte-ignore a11y-click-events-have-key-events -->

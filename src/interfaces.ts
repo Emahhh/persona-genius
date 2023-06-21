@@ -36,10 +36,11 @@ export function validatePersona(pers: Persona): boolean {
 
 // JSON TO OBJECT
 export function jsonToPersona(json: string): Persona {
+    console.log("Parsing this JSON to Persona:", json);
     const objPersona = JSON.parse(json);
     console.log(objPersona);
     if (!validatePersona(objPersona)) {
-        throw new Error("Invalid persona");
+        throw new Error("Invalid persona: this JSON does not contain all the required fields");
     }
     return objPersona;
 }
