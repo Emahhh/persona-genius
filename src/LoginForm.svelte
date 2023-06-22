@@ -1,8 +1,8 @@
 <script lang="ts">
     import { userStore } from "./loginStore";
 
-    let email = "";
-    let pwd = "";
+    let email:string = "";
+    let pwd:string = "";
 </script>
 
 <div class="big-container">
@@ -37,7 +37,7 @@
             <div>
                 <!-- GOOGLE LOGIN-->
                 <button type="button" on:click={userStore.googleLogin}
-                    >Login or Sign Up with Google</button
+                    >Login or Sign Up <b>with Google</b></button
                 >
             </div>
         </form>
