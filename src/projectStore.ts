@@ -1,8 +1,10 @@
 import { app } from "./firebaseConf";
-import { writable } from "svelte/store";
+import { writable, get as getStore} from "svelte/store";
 import { getDatabase, ref, onValue, set, get, type DatabaseReference } from "firebase/database";
 import DEBUGMODE from "./DebugPanel.svelte";
 import type { Project, Persona, Invitation } from "./interfaces";
+import { usersDBStore } from "./usersDBStore";
+import { userStore } from "./loginStore";
 
 // STORES
 export const projectsStore = writable<Record<string, Project>>({});
@@ -10,19 +12,41 @@ export const selectedProjectId = writable<string | undefined>(undefined);
 export const selectedProject = writable<Project | undefined>(undefined);
 
 // FIREBASE STUFF
-
 const rtDatabase = getDatabase(); // istanza del mio Real Time Database di Firebase
-
 const allProjectsRef = ref(rtDatabase, 'projects/'); // riferimento al nodo 'projects' del mio database
 
-// quando il nodo 'projects' cambia, aggiorna il mio store con i dati aggiornati 
+// quando il nodo 'projects' cambia nel db, sincronizza il mio store con i dati aggiornati
+// TODO: cambiare con mi prendo solo i progetti a cui l'utente ha accesso
 onValue(allProjectsRef, (snapshot) => {
     const unfilteredProjects = snapshot.val();
     const filteredProjects = filterProjects(unfilteredProjects);
     projectsStore.set(filteredProjects);
 });
 
-// when the selectedProjectId changes, update the selectedProject
+// quando userProjects (es: utente è stato aggiunto a un progetto) o un singolo progetto (progetto modificato) cambiano, aggiorna projectsStore
+usersDBStore.userProjectsList.subscribe((newUserProjectsList) => {
+    if (!newUserProjectsList) {
+        projectsStore.set({});
+        return;
+    }
+
+    for (const projectId of newUserProjectsList) {
+        const projectRef = ref(rtDatabase, `projects/${projectId}`);
+        onValue(projectRef, (snapshot) => {
+            const projectValue = snapshot.val();
+            projectsStore.update((projects) => {
+                projects[projectId] = projectValue;
+                return projects;
+            });
+        }
+        );
+    }
+});
+
+
+
+// when the selectedProjectId store changes, update the selectedProject
+// also: keep the selectedProjectId in sync with the selectedProject
 selectedProjectId.subscribe((newSelectedProjectId) => {
     if (!newSelectedProjectId) {
         selectedProject.set(undefined);
@@ -30,8 +54,17 @@ selectedProjectId.subscribe((newSelectedProjectId) => {
     }
 
     const selectedProjectRef = ref(rtDatabase, `projects/${newSelectedProjectId}`);
+    
     onValue(selectedProjectRef, (snapshot) => {
         const selectedProjectValue = snapshot.val();
+        if(!selectedProjectValue) {
+            console.error('selectedProjectId: no data available in snapshot');
+            return;
+        }
+        if(!checkProjectRights(selectedProjectValue)) {
+            console.error('selectedProjectId: user has no rights to access this project (but the db returned it anyway). critical error in the db rules, this should not happen');
+            return;
+        }
         selectedProject.set(selectedProjectValue);
     }
     );
@@ -170,10 +203,23 @@ export async function setPersona(projectId: string | undefined, personaId: strin
 
 // MANIPOLAZIONE DEI DATI-------------------
 
-function filterProjects(unfilteredProjects: any) {
+function filterProjects(unfilteredProjects: any) { // TODO: rimuovere?
     // TODO: implementare politica di sicurezza nel realtime database
     // TODO: implementare la funzione che filtra i progetti in base all'utente loggato, se ce ne sono in più, è un errore - il database dovrebbe restituire solo i progetti su cui l'utente ha diritto
     return unfilteredProjects;
 }
+
+// check if the user has rights on the project, if not, return false, and notify that c'è un errore nelle rules del sb, perché non dovrebbe essere possibile
+function checkProjectRights(prj: Project):boolean {
+
+    const currUserID = getStore(userStore)?.uid;
+    if(currUserID == prj.owner) return true;
+    //TODO: handle invites if(prj.invitedUsers.includes(currUserID)) return true;
+
+    return false;
+}
+
+
+
 
 

@@ -10,11 +10,14 @@
     import { onMount } from "svelte";
     import { get } from "svelte/store";
     import type { Project } from "./interfaces";
-    import { getUsername } from "./usersStore";
+    import { usersDBStore } from "./usersDBStore";
+    import UserInfo from "./UserInfo.svelte";
 
+    const currentUser = usersDBStore.currentUser;
 
-    function newProject(): void { 
-        if (!get(userStore)?.uid) {
+    function handleNewProject(): void { 
+        const uid = get(userStore)?.uid;
+        if (!uid) {
             console.log("Error: user undefined.");
             return;
         }
@@ -22,13 +25,14 @@
         const newProjectId = crypto.randomUUID();
         const newProject: Project = {
             prjName: "New Project",
-            owner: get(userStore)!.uid,
+            owner: uid,
             personas: {},
             prjDescription: "A wonderful new service that will change the world.",
             invitedUsers: {}
         };
 
         editProject(newProjectId, newProject);
+        usersDBStore.addPrjToUser(uid, newProjectId);
         console.log("new project id: ", newProjectId);
     }
 </script>
@@ -38,28 +42,31 @@
 </div>
 
 <div class="main-container grid"> <!-- TODO: sostituire con CSS migliore -->
-    <div class="project new-project" on:click={() => newProject()}>+</div>
+    <div class="project new-project" on:click={() => handleNewProject()}>+</div>
     
     {#each Object.entries($projectsStore) as [projectId, project]} <!-- TODO: show loading? -->
-        <!-- svelte-ignore a11y-click-events-have-key-events -->
-        <div class="project" on:click={() => selectedProjectId.set(projectId)}>
-            <span class="projectName">{project.prjName}</span>
-            <br />
+        {#if projectId && project && project.prjName && project.owner}
+            <!-- svelte-ignore a11y-click-events-have-key-events -->
+            <div class="project" on:click={() => selectedProjectId.set(projectId)}>
+                <span class="projectName">{project.prjName}</span>
+                <br />
 
-            {#await getUsername(project.owner)}
-                <span class="loading">Loading...</span> <!--TODO: remove message while loading and while error so that its nicer-->
-            {:then username}
-                <span class="createdBy">Created by<br /><b>{username}</b></span> <!-- TODO: check if created by ME-->
-            {:catch error}
-                <span class="error">Error: {error.message}</span>
-            {/await}
+                {#await usersDBStore.getUsername(project.owner)}
+                    <span class="loading">Loading...</span> <!--TODO: remove message while loading and while error so that its nicer-->
+                {:then username}
+                    <span class="createdBy">Created by<br /><b>{username}</b></span> <!-- TODO: check if created by ME-->
+                {:catch error}
+                    <span class="error">Error: {error.message}</span>
+                {/await}
 
-        </div>
+            </div>
+        {/if}
+
     {/each}
     
 </div>
 
-<DebugPanel variables={[$selectedProjectId]} varNames={"$selectedProjectId"} />
+<DebugPanel variables={[$selectedProjectId, $projectsStore, $userStore, $currentUser]} varNames={"$selectedProjectId, $projectsStore, $userStore, $currentUser"} />
 
 <style>
     :root{

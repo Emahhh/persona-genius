@@ -26,7 +26,7 @@
     }
 
 
-    function handleDeleteProject($selectedProjectId: string | undefined): any {
+    async function handleDeleteProject($selectedProjectId: string | undefined): Promise<void> {
         if (!confirm("Are you sure you want to delete this project named " + $selectedProject?.prjName + "?")) {
             return;
         }
@@ -36,9 +36,10 @@
             return;
         }
 
-        deleteProject($selectedProjectId);
+        await deleteProject($selectedProjectId);
         infoEditMode = false;
         selectedProjectId.set(undefined);
+        selectedProject.set(undefined);
         console.log("Deleted project with id: ", $selectedProjectId);
     }
 </script>
