@@ -86,6 +86,9 @@
     .grid {
         display: grid;
         grid-template-columns: repeat(auto-fill, minmax(var(--project-width), 1fr)); /* TODO: sostituire con CSS migliore */
+        grid-template-rows: repeat(auto-fill, minmax(var(--project-width), 1fr));
+        justify-items: center;
+        row-gap: 10px;
     }
     .project {
         width: var(--project-width);
