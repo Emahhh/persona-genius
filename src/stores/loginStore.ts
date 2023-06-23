@@ -2,7 +2,7 @@ import type { User } from 'firebase/auth';
 
 import { getAuth, GoogleAuthProvider, onAuthStateChanged, signInWithPopup, signInWithEmailAndPassword, signOut, createUserWithEmailAndPassword } from "firebase/auth";
 import { writable } from "svelte/store";
-import { app } from './firebaseConf';
+import { app } from '../utils/firebaseConf';
 
 const auth = getAuth(app);
 const provider = new GoogleAuthProvider();

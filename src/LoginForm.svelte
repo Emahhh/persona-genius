@@ -1,5 +1,5 @@
 <script lang="ts">
-    import { userStore } from "./loginStore";
+    import { userStore } from "./stores/loginStore";
 
     let email:string = "";
     let pwd:string = "";

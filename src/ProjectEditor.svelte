@@ -10,10 +10,10 @@
         setPersona,
         getProject,
         deletePersona,
-    } from "./projectStore";
+    } from "./stores/projectStore";
     import { onMount } from "svelte";
-    import {jsonToPersona, type Persona, } from "./interfaces";
-    import { generatePersona } from "./apiRequests";
+    import {jsonToPersona, type Persona, } from "./utils/interfaces";
+    import { generatePersona } from "./utils/apiRequests";
 
     let selectedPersonaId: string | undefined = undefined;
     let selectedPersona: Persona | undefined = undefined;

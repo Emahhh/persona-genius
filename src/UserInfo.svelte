@@ -1,5 +1,5 @@
 <script lang="ts">
-    import { userStore } from "./loginStore";
+    import { userStore } from "./stores/loginStore";
 
 /*     // initializes the user entry in the "users" database, if it doesn't exist yet
     function initializeUsersEntry(): void {

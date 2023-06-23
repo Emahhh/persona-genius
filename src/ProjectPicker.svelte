@@ -5,12 +5,12 @@
         selectedProjectId,
         editProject,
         
-    } from "./projectStore";
-    import { userStore } from "./loginStore";
+    } from "./stores/projectStore";
+    import { userStore } from "./stores/loginStore";
     import { onMount } from "svelte";
     import { get } from "svelte/store";
-    import type { Project } from "./interfaces";
-    import { usersDBStore } from "./usersDBStore";
+    import type { Project } from "./utils/interfaces";
+    import { usersDBStore } from "./stores/usersDBStore";
     import UserInfo from "./UserInfo.svelte";
 
     const currentUser = usersDBStore.currentUser;

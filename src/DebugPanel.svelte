@@ -3,7 +3,7 @@
         projectsStore,
         selectedProjectId,
         selectedProject,
-    } from "./projectStore";
+    } from "./stores/projectStore";
 
     export let DEBUGMODE = true; // METTERE A FALSE PER NASCONDERE IL PANNELLO DI DEBUG
 

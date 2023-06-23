@@ -1,6 +1,6 @@
 <script lang="ts">
     import ProjectPicker from "./ProjectPicker.svelte";
-    import { selectedProjectId, selectedProject} from "./projectStore";
+    import { selectedProjectId, selectedProject} from "./stores/projectStore";
     import ProjectEditor from "./ProjectEditor.svelte";
 
 </script>

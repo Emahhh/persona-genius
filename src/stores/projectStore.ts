@@ -1,8 +1,8 @@
-import { app } from "./firebaseConf";
+import { app } from "../utils/firebaseConf";
 import { writable, get as getStore} from "svelte/store";
 import { getDatabase, ref, onValue, set, get, type DatabaseReference } from "firebase/database";
-import DEBUGMODE from "./DebugPanel.svelte";
-import type { Project, Persona, Invitation } from "./interfaces";
+import DEBUGMODE from "../DebugPanel.svelte";
+import type { Project, Persona, Invitation } from "../utils/interfaces";
 import { usersDBStore } from "./usersDBStore";
 import { userStore } from "./loginStore";
 
