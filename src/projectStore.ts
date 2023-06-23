@@ -11,19 +11,16 @@ export const projectsStore = writable<Record<string, Project>>({});
 export const selectedProjectId = writable<string | undefined>(undefined);
 export const selectedProject = writable<Project | undefined>(undefined);
 
-// FIREBASE STUFF
 const rtDatabase = getDatabase(); // istanza del mio Real Time Database di Firebase
 const allProjectsRef = ref(rtDatabase, 'projects/'); // riferimento al nodo 'projects' del mio database
 
-// quando il nodo 'projects' cambia nel db, sincronizza il mio store con i dati aggiornati
-// TODO: cambiare con mi prendo solo i progetti a cui l'utente ha accesso
-onValue(allProjectsRef, (snapshot) => {
-    const unfilteredProjects = snapshot.val();
-    const filteredProjects = filterProjects(unfilteredProjects);
-    projectsStore.set(filteredProjects);
-});
 
-// quando userProjects (es: utente è stato aggiunto a un progetto) o un singolo progetto (progetto modificato) cambiano, aggiorna projectsStore
+// SYNC
+
+// to keep the list of projects in sync with the database
+// triggerata: quando userProjects cambia (es: user ha creato un nuovo progetto)
+// o quando un singolo progetto (progetto modificato) cambia
+// effetto: aggiorna projectsStore con i dati aggiornati dei progetti a cui l'utente ha accesso
 usersDBStore.userProjectsList.subscribe((newUserProjectsList) => {
     if (!newUserProjectsList) {
         projectsStore.set({});
@@ -32,21 +29,39 @@ usersDBStore.userProjectsList.subscribe((newUserProjectsList) => {
 
     for (const projectId of newUserProjectsList) {
         const projectRef = ref(rtDatabase, `projects/${projectId}`);
+
         onValue(projectRef, (snapshot) => {
+            console.log('change detected in project', projectId, 'updating projectsStore...');
+
             const projectValue = snapshot.val();
+            if (!projectValue) {
+                console.log('userProjectsList: no data found for project', projectId, ". This is normal if the project has been deleted");
+                projectsStore.update((projects) => {
+                    delete projects[projectId];
+                    return projects;
+                });
+                return;
+            }
+            if(!checkProjectRights(projectValue)) {
+                console.error('selectedProjectId: user has no rights to access this project (but the db returned it anyway). critical error in the db rules, this should not happen');
+                projectsStore.update((projects) => {
+                    delete projects[projectId];
+                    return projects;
+                });
+                return;
+            }
+
             projectsStore.update((projects) => {
                 projects[projectId] = projectValue;
                 return projects;
             });
-        }
-        );
+        });
     }
 });
 
 
-
-// when the selectedProjectId store changes, update the selectedProject
-// also: keep the selectedProjectId in sync with the selectedProject
+// to keep the selectedProjectId in sync with the database
+// when the selectedProjectId store changes (cioè user selects a new id), update the selectedProject w the value
 selectedProjectId.subscribe((newSelectedProjectId) => {
     if (!newSelectedProjectId) {
         selectedProject.set(undefined);
@@ -58,11 +73,15 @@ selectedProjectId.subscribe((newSelectedProjectId) => {
     onValue(selectedProjectRef, (snapshot) => {
         const selectedProjectValue = snapshot.val();
         if(!selectedProjectValue) {
-            console.error('selectedProjectId: no data available in snapshot');
+            console.log('Trying to get the value of this projectID, but no data found. This is normal if the project has been deleted');
+            selectedProject.set(undefined);
+            selectedProjectId.set(undefined);
             return;
         }
         if(!checkProjectRights(selectedProjectValue)) {
             console.error('selectedProjectId: user has no rights to access this project (but the db returned it anyway). critical error in the db rules, this should not happen');
+            selectedProject.set(undefined);
+            selectedProjectId.set(undefined)
             return;
         }
         selectedProject.set(selectedProjectValue);
@@ -156,7 +175,7 @@ export async function deleteProject(projectId: string | undefined) {
     const projectRef: DatabaseReference = ref(rtDatabase, `projects/${projectId}`);
 
     try {
-        await set(projectRef, null); //TODO: sure?
+        await set(projectRef, null);
         console.log('Project deleted successfully.');
     } catch (error) {
         console.error('Project deletion failed: ', error);

@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { type Persona, jsonToPersona, validatePersona } from './interfaces';
+import { type Persona, validatePersona } from './interfaces';
 
 const baseURL = 'http://127.0.0.1:5001/saw-prova/us-central1/'; //TODO: for test, cambiare 
 
