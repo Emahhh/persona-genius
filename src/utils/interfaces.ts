@@ -3,16 +3,11 @@ export interface Project {
     prjName: string;
     owner: string;
     prjDescription: string;
-    invitedUsers: Record<string, Invitation>;
+    invitedUsers: Record<string, boolean>;
     personas: Record<string, Persona>;
     // TODO: add last edit timestamp and order by it
 }
 
-export interface Invitation {
-    invitedUserId: string;
-    status: string;
-    timestamp: string;
-}
 
 export interface Persona {
     name: string;
