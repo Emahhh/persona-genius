@@ -1,6 +1,6 @@
 <script lang="ts">
     import { get } from "firebase/database";
-    import DebugPanel from "./DebugPanel.svelte";
+    import DebugPanel from "../DebugPanel.svelte";
     import ProjectInfoEditor from "./ProjectInfoEditor.svelte";
     import {
         selectedProjectId,
@@ -10,10 +10,10 @@
         setPersona,
         getProject,
         deletePersona,
-    } from "./stores/projectStore";
+    } from "../stores/projectStore";
     import { onMount } from "svelte";
-    import {jsonToPersona, type Persona, } from "./utils/interfaces";
-    import { generatePersona } from "./utils/apiRequests";
+    import {jsonToPersona, type Persona, } from "../utils/interfaces";
+    import { generatePersona } from "../utils/apiRequests";
 
     let selectedPersonaId: string | undefined = undefined;
     let selectedPersona: Persona | undefined = undefined;

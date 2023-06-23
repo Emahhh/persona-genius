@@ -1,17 +1,17 @@
 <script lang="ts">
-    import DebugPanel from "./DebugPanel.svelte";
+    import DebugPanel from "../DebugPanel.svelte";
     import {
         projectsStore,
         selectedProjectId,
         editProject,
         
-    } from "./stores/projectStore";
-    import { userStore } from "./stores/loginStore";
+    } from "../stores/projectStore";
+    import { userStore } from "../stores/loginStore";
     import { onMount } from "svelte";
     import { get } from "svelte/store";
-    import type { Project } from "./utils/interfaces";
-    import { usersDBStore } from "./stores/usersDBStore";
-    import UserInfo from "./UserInfo.svelte";
+    import type { Project } from "../utils/interfaces";
+    import { usersDBStore } from "../stores/usersDBStore";
+    import UserInfo from "../UserInfo.svelte";
 
     const currentUser = usersDBStore.currentUser;
 

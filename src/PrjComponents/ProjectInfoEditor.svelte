@@ -5,7 +5,7 @@
         editProjectInfo,
         deleteProject,
         getProject,
-    } from "./stores/projectStore";
+    } from "../stores/projectStore";
 
     export let infoEditMode: boolean;
 
