@@ -29,9 +29,6 @@
                     on:click={() => userStore.login(email, pwd)}>Login</button
                 >
                 <button type="button" on:click={() => userStore.signUpEmPwd(email,pwd)}>Sign Up</button>
-                <!-- TODO: implementa sign up? Meglio portare ad un'altra schermata?
-                <button type="button" on:click={() => userStore.signUp(email, pwd)}>Sign Up</button>  
-            -->
             </div>
             <hr />
             <div>

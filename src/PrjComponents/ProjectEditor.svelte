@@ -1,7 +1,7 @@
 <script lang="ts">
     import { get } from "firebase/database";
     import DebugPanel from "../DebugPanel.svelte";
-    import ProjectInfoEditor from "./ProjectInfoEditor.svelte";
+    import ProjectInfoEditor from "./InfoEditor.svelte";
     import {
         selectedProjectId,
         selectedProject,
@@ -224,7 +224,6 @@
 
 
     {#if infoEditMode} <!-- EDITOR MODAL --------------------------------------------------->
-        <!-- TODO: triggherarlo se il progetto si chiama ancora "new project" -->
         <ProjectInfoEditor bind:infoEditMode={infoEditMode}/>
     {/if}
 

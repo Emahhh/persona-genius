@@ -59,7 +59,7 @@
                         {collID}
                     {/await}
                 </li>
-                <!-- TODO: addremove button-->
+                <!-- TODO: add remove button-->
             {/each}
         {/if}
     </ul>

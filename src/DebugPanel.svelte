@@ -1,9 +1,4 @@
 <script lang="ts">
-    import {
-        projectsStore,
-        selectedProjectId,
-        selectedProject,
-    } from "./stores/projectStore";
 
     export let DEBUGMODE = true; // METTERE A FALSE PER NASCONDERE IL PANNELLO DI DEBUG
 

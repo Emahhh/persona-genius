@@ -112,7 +112,6 @@ export function getProject(projectId: string | undefined): Promise<Project | und
     return get(projectRef)
         .then((snapshot) => {
             if (snapshot.exists()) {
-               // console.log('getProject: returning', JSON.stringify(snapshot.val()));
                 return snapshot.val();
             } else {
                 console.error('getProject: no data available');

@@ -19,7 +19,7 @@ Idea:
 - invito viene salvato nel nodo "invites" e nel nodo progetto/sentInvites
 - l'utente invia manualmente il codice all'utente che vuole invitare
 
-- l'utente che riceve il codice può accettare o rifiutare l'invito inserendo il codice in un form
+- l'utente che riceve il codice può accettare l'invito inserendo il codice in un form
 - se l'utente accetta l'invito, una cloud function
     - controlla che il codice sia valido e non scaduto (se è scaduto, l'invito viene cancellato)
     - aggiunge l'utente alla lista degli utenti invitati del progetto
@@ -27,13 +27,9 @@ Idea:
 */
 
 
-// STORES
-const myInvites = writable<Record<string, Invitation>>({}); // invites of the current user
-// TODO: rimuovere?
 
-// TODO: add uid to the project - here:  invitedUsers: Record<string, boolean>; e tenerli in sync
 // TODO: check for new invites - if there are send a notification
-// TODO: function to send new invite
+
 
 const rtDatabase = getDatabase(); // istanza del mio Real Time Database di Firebase
 
@@ -119,4 +115,4 @@ async function getInvite(inviteUID: string): Promise<Invitation> {
 }
 
 
-export const invitesStore = { myInvites, createInvite, acceptInvite, getInvite };
+export const invitesStore = { createInvite, acceptInvite, getInvite };

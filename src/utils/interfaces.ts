@@ -18,7 +18,7 @@ export interface Persona {
     frustrations: string;
     image: string;
     job: string;
-    // TODO: inserire per ordinare? lastEdit: string;
+    // TODO: add last edit timestamp and order by it
     // TODO: chat?
 }
 

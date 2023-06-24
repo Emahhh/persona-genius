@@ -35,7 +35,7 @@ function createUserStore() {
     // GOOGLE
     function googleLogin() {
         try{
-        signInWithPopup(auth, provider);
+            signInWithPopup(auth, provider);
         } catch (err:any) {
             console.error('ERROR signin with google:', err);
             alert(getMessageFromErrorCode(err.code));

@@ -7,15 +7,10 @@
         
     } from "../stores/projectStore";
     import { userStore } from "../stores/loginStore";
-    import { onMount } from "svelte";
-    import { get } from "svelte/store";
-    import type { Project } from "../utils/interfaces";
     import { usersDBStore } from "../stores/usersDBStore";
-    import UserInfo from "../UserInfo.svelte";
-    import { invitesStore } from "../stores/invitesStore";
+
     import JoinOrCreateProject from "./JoinOrCreateProject.svelte";
 
-    const myInvites = invitesStore.myInvites;
     const userProjectsList = usersDBStore.userProjectsList;
 
     const currentUser = usersDBStore.currentUser;
@@ -38,6 +33,7 @@
 </div>
 
 <div class="main-container grid"> <!-- TODO: sostituire con CSS migliore -->
+    <!-- svelte-ignore a11y-click-events-have-key-events -->
     <div class="project new-project" on:click={() => handleAddButton()}>
         <span class="projectName">+</span> 
         <br />
@@ -66,7 +62,7 @@
     
 </div>
 
-<DebugPanel variables={[$myInvites, $userProjectsList, $selectedProjectId, $projectsStore, $userStore, $currentUser]} varNames={"$myInvites, $userProjectsList, $selectedProjectId, $projectsStore, $userStore, $currentUser"} />
+<DebugPanel variables={[$userProjectsList, $selectedProjectId, $projectsStore, $userStore, $currentUser]} varNames={"$userProjectsList, $selectedProjectId, $projectsStore, $userStore, $currentUser"} />
 
 <style>
     :root{
