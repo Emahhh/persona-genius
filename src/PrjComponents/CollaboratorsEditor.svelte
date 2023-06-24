@@ -1,8 +1,10 @@
 <script lang="ts">
     import { invitesStore } from "../stores/invitesStore";
     import { userStore } from "../stores/loginStore";
-    import { selectedProject, selectedProjectId } from "../stores/projectStore";
+    import { deleteProject, selectedProject, selectedProjectId } from "../stores/projectStore";
     import { usersDBStore } from "../stores/usersDBStore";
+
+    export let infoEditMode: boolean;
 
     async function handleCreateInvite() {
         if (!$selectedProjectId || !$selectedProject?.prjName) {
@@ -25,6 +27,24 @@
         }
         //alert("Invite link: " + window.location.origin + "/#/invite/" + uid);
         alert("Invite code: " + uid);
+    }
+
+
+    async function handleDeleteProject($selectedProjectId: string | undefined): Promise<void> {
+        if (!confirm("Are you sure you want to delete this project named " + $selectedProject?.prjName + "?")) {
+            return;
+        }
+
+        if (!$selectedProjectId) {
+            console.error("Error while deleting project: no project selected");
+            return;
+        }
+
+        await deleteProject($selectedProjectId);
+        infoEditMode = false;
+        selectedProjectId.set(undefined);
+        selectedProject.set(undefined);
+        console.log("Deleted project with id: ", $selectedProjectId);
     }
 </script>
 
@@ -95,6 +115,10 @@
     </ul>
 
 
+    <hr>
+    <button class="delete-button" on:click={()=> handleDeleteProject($selectedProjectId)}>Delete project</button> 
+
+
 {/if}
 
 <style>
@@ -108,5 +132,9 @@
         width: 1.2rem;
         height: 1.2rem;
         margin-left: -6px;
+    }
+
+    .delete-button {
+        background-color: red;
     }
 </style>

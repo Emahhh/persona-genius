@@ -41,22 +41,7 @@
     }
 
 
-    async function handleDeleteProject($selectedProjectId: string | undefined): Promise<void> {
-        if (!confirm("Are you sure you want to delete this project named " + $selectedProject?.prjName + "?")) {
-            return;
-        }
 
-        if (!$selectedProjectId) {
-            console.error("Error while deleting project: no project selected");
-            return;
-        }
-
-        await deleteProject($selectedProjectId);
-        infoEditMode = false;
-        selectedProjectId.set(undefined);
-        selectedProject.set(undefined);
-        console.log("Deleted project with id: ", $selectedProjectId);
-    }
 
 
 
@@ -81,11 +66,10 @@
 
             <hr>
 
-            <CollaboratorsEditor />
+            <CollaboratorsEditor bind:infoEditMode={infoEditMode}/>
         
 
-            <hr>
-            <button class="delete-button" on:click={()=> handleDeleteProject($selectedProjectId)}>Delete project</button> 
+
             <footer>
                 <a role="button" href="#" class="secondary" on:click={()=> cancelEditInfo()}>Cancel</a>
                 <a role="button" href="#" on:click={()=> handleConfirmEdit()}>Confirm and save</a>
@@ -95,9 +79,7 @@
 {/if}
 
 <style>
-    .delete-button {
-        background-color: red;
-    }
+
 
     .project-info-editor {
         width: 100%;
