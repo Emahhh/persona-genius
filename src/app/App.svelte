@@ -5,6 +5,8 @@
   import ProjectArea from "../PrjComponents/ProjectArea.svelte";
 </script>
 
+
+
 {#if $userStore}
   <UserInfo />
   <ProjectArea />

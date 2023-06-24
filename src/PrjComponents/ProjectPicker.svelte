@@ -32,7 +32,7 @@
     <h4>Project Picker: Apri un progetto, o creane uno nuovo.</h4>
 </div>
 
-<div class="main-container grid"> <!-- TODO: sostituire con CSS migliore -->
+<div class="main-container"> <!-- TODO: sostituire con CSS migliore -->
     <!-- svelte-ignore a11y-click-events-have-key-events -->
     <div class="project new-project" on:click={() => handleAddButton()}>
         <span class="projectName">+</span> 
@@ -65,9 +65,7 @@
 <DebugPanel variables={[$userProjectsList, $selectedProjectId, $projectsStore, $userStore, $currentUser]} varNames={"$userProjectsList, $selectedProjectId, $projectsStore, $userStore, $currentUser"} />
 
 <style>
-    :root{
-        --project-width: 200px;
-    }
+
     .panelTitle {
         margin-bottom: 10px;
         margin-top: 20px;
@@ -78,29 +76,59 @@
         margin-bottom: 5px;
     }
 
-
-    .grid {
-        display: grid;
-        grid-template-columns: repeat(auto-fill, minmax(var(--project-width), 1fr)); /* TODO: sostituire con CSS migliore */
-        grid-template-rows: repeat(auto-fill, minmax(var(--project-width), 1fr));
-        justify-items: center;
-        row-gap: 10px;
+    .main-container {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: left;
+        align-items: start;
+        align-content: start;
     }
+
+
     .project {
-        width: var(--project-width);
-        height: var(--project-width);
-        background-color: #ccc;
+        aspect-ratio: 1/ 1;
+        width: 18%;
         margin: 10px;
+
         display: flex;
         flex-direction: column;
         justify-content: center;
         align-items: center;
-        font-weight: bold;
+        
         font-size: 16px;
         cursor: pointer;
-        border-radius: 10px;
-        box-shadow: 0 0 4px rgba(0, 0, 0, 0.361);
+        
+        background-color: rgba(255, 255, 255, 0.634);
+        border-radius: 12px;
+        box-shadow: 0 0 6px rgba(0, 0, 0, 0.376);
         transition: box-shadow 0.3s ease; /* per l'hover */
+    }
+
+    @media screen and (max-width: 1200px) {
+        .project {
+            width: 23%;
+        }
+    }
+
+    @media screen and (max-width: 1000px) {
+        .project {
+            width: 30%;
+        }
+    }
+
+    @media screen and (max-width: 800px) {
+        .project {
+            width: 45%;
+        }
+    }
+
+    @media screen and (max-width: 600px) {
+        .project {
+            width: 250px;
+        }
+        .main-container {
+            justify-content: center;
+        }
     }
 
     .project:hover {
@@ -117,7 +145,7 @@
     }
 
     .new-project {
-        background-color: #99ccff;
+        background-color: #008550b5;
         color: white;
     }
 </style>
