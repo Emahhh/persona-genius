@@ -12,37 +12,36 @@
     import type { Project } from "../utils/interfaces";
     import { usersDBStore } from "../stores/usersDBStore";
     import UserInfo from "../UserInfo.svelte";
+    import { invitesStore } from "../stores/invitesStore";
+    import JoinOrCreateProject from "./JoinOrCreateProject.svelte";
+
+    const myInvites = invitesStore.myInvites;
 
     const currentUser = usersDBStore.currentUser;
+    let joinDialogOpen:boolean = false;
 
-    function handleNewProject(): void { 
-        const uid = get(userStore)?.uid;
-        if (!uid) {
-            console.log("Error: user undefined.");
-            return;
-        }
-
-        const newProjectId = crypto.randomUUID();
-        const newProject: Project = {
-            prjName: "New Project",
-            owner: uid,
-            personas: {},
-            prjDescription: "A wonderful new service that will change the world.",
-            invitedUsers: {}
-        };
-
-        editProject(newProjectId, newProject);
-        usersDBStore.addPrjToUser(uid, newProjectId);
-        console.log("new project id: ", newProjectId);
+    function handleAddButton(): void { 
+        joinDialogOpen = true;
     }
+
+
 </script>
+
+{#if joinDialogOpen}
+    <JoinOrCreateProject bind:joinDialogOpen={joinDialogOpen} />
+{/if}
+
 
 <div class="panelTitle">
     <h4>Project Picker: Apri un progetto, o creane uno nuovo.</h4>
 </div>
 
 <div class="main-container grid"> <!-- TODO: sostituire con CSS migliore -->
-    <div class="project new-project" on:click={() => handleNewProject()}>+</div>
+    <div class="project new-project" on:click={() => handleAddButton()}>
+        <span class="projectName">+</span> 
+        <br />
+        <span class="createdBy">Create new project or join one.</span>
+    </div>
     
     {#each Object.entries($projectsStore) as [projectId, project]} <!-- TODO: show loading? -->
         {#if projectId && project && project.prjName && project.owner}
@@ -66,7 +65,7 @@
     
 </div>
 
-<DebugPanel variables={[$selectedProjectId, $projectsStore, $userStore, $currentUser]} varNames={"$selectedProjectId, $projectsStore, $userStore, $currentUser"} />
+<DebugPanel variables={[$myInvites, $selectedProjectId, $projectsStore, $userStore, $currentUser]} varNames={"$myInvites, $selectedProjectId, $projectsStore, $userStore, $currentUser"} />
 
 <style>
     :root{

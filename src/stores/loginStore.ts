@@ -88,12 +88,9 @@ function getMessageFromErrorCode(errorCode: string): string {
         case "ERROR_USER_DISABLED":
         case "user-disabled":
             return "User disabled.";
-        case "ERROR_TOO_MANY_REQUESTS":
-        case "operation-not-allowed":
-            return "Too many requests to log into this account.";
         case "ERROR_OPERATION_NOT_ALLOWED":
         case "operation-not-allowed":
-            return "Server error, please try again later.";
+            return "Server error, please try again later. (operation-not-allowed)";
         case "ERROR_INVALID_EMAIL":
         case "invalid-email":
             return "Email address is invalid.";
