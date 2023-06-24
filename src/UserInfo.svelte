@@ -13,6 +13,12 @@
         };
 
     } */
+
+
+    function handleLogout() {
+        userStore.logout();
+        window.location.reload(); // reload to reset the state
+    }
 </script>
 
 <!-- TODO: rename in LoggedNavbar ? -->
@@ -25,7 +31,7 @@
     <ul>
         Logged in as <i> {$userStore?.displayName ?? $userStore?.email ?? "unknown"} </i>
         <li>
-            <a href="#" role="button" on:click={userStore.logout}>Logout</a>
+            <a href="#" role="button" on:click={handleLogout}>Logout</a>
         </li>
     </ul>
 </nav>

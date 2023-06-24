@@ -90,8 +90,16 @@
                 {#if !$selectedProject.collaborators || Object.values($selectedProject.collaborators).length === 0}
                     <li>No user added to your project yet.</li>
                 {:else}
-                    {#each Object.keys($selectedProject.collaborators) as coll}
-                        <li>{usersDBStore.getUsername(coll)}</li> <!-- TODO: remove button-->
+                    {#each Object.keys($selectedProject.collaborators) as collID}
+                        <li>{#await usersDBStore.getUsername(collID) }
+                                Loading...
+                            {:then userName}
+                                {userName ?? "unknown"}
+                            {:catch error}
+                                {collID}
+                            {/await}
+                        </li>
+                        <!-- TODO: addremove button-->
                     {/each}
                 {/if}
             </ul>
