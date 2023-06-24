@@ -8,7 +8,7 @@ import axios, { AxiosError } from "axios";
 export interface Invitation {
     projectId: string;
     projectName: string;
-    expiration: string;
+    expiration: number;
     senderUID: string;
 }
 
@@ -37,7 +37,7 @@ const rtDatabase = getDatabase(); // istanza del mio Real Time Database di Fireb
 
 
 
-async function createInvite(projectId: string, projectName: string, expiration: string): Promise<string> {
+async function createInvite(projectId: string, projectName: string, expiration: number): Promise<string> {
     // create a new invite for the current user
     const uid = getStore(userStore)?.uid;
     const projectRef = ref(rtDatabase, `projects/${projectId}`);

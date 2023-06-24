@@ -13,9 +13,9 @@
         }
 
         const timeToExpire = 1000 * 60 * 60 * 24 * 3; // 3 days
-        const expirationDate: string = new Date(
-            Date.now() + timeToExpire
-        ).toString();
+        const expirationDate: number = Date.now() + timeToExpire;
+
+
         const uid: string = await invitesStore.createInvite(
             $selectedProjectId,
             $selectedProject?.prjName,
@@ -100,7 +100,7 @@
 
                     {#await invitesStore.getInvite(inviteCode) ?? "unknown"}
                     {:then invVal}
-                        <br /> Expires on: {invVal?.expiration ?? "unknown"}
+                        <br /> Expires on: { new Date(invVal.expiration).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric', hour: 'numeric', minute: 'numeric' }) ?? "unknown"}
                     {/await}
                 
                 </li>
