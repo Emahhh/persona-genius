@@ -5,8 +5,6 @@
     import {
         selectedProjectId,
         selectedProject,
-        editProject,
-        editProjectInfo,
         setPersona,
         getProject,
         deletePersona,

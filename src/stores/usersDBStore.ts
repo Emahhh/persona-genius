@@ -56,24 +56,33 @@ userStore.subscribe((newUser) => {
 
     const currentUserRef: DatabaseReference = ref(rtDatabase, `users/${newUser.uid}`);
 
-    onValue(currentUserRef, (snapshot) => { // keeps the local store in sync with the database
-        const currentUserValue = snapshot.val();
+    onValue(currentUserRef, 
+        
+        (snapshot) => { // keeps the local store in sync with the database
+            const currentUserValue = snapshot.val();
 
-        if (!currentUserValue) {
-            // user does not exist in the database, create a new entry (should only happen when the user logs in for the first time)
-            const newUserRecord: UserRecord = {
-                displayUsername: newUser.displayName ?? newUser.email ?? "Unknown",
-                projects: {}
-            };
-            set(currentUserRef, newUserRecord);
-            currentUser.set(newUserRecord);
-            console.log('currentUserDBStore: new user initialized in the users/ database');
+            if (!currentUserValue) {
+                // user does not exist in the database, create a new entry (should only happen when the user logs in for the first time)
+                const newUserRecord: UserRecord = {
+                    displayUsername: newUser.displayName ?? newUser.email ?? "Unknown",
+                    projects: {}
+                };
+                set(currentUserRef, newUserRecord);
+                currentUser.set(newUserRecord);
+                console.log('currentUserDBStore: new user initialized in the users/ database');
 
-        } else {
-            currentUser.set(currentUserValue);
+            } else {
+                currentUser.set(currentUserValue);
+            }
+        },
+
+        (error) => {
+            console.error('currentUserDBStore: error reading data:', error);
         }
-    });
 
+    );
+
+    
 });
 
 

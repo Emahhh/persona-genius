@@ -16,6 +16,7 @@
     import JoinOrCreateProject from "./JoinOrCreateProject.svelte";
 
     const myInvites = invitesStore.myInvites;
+    const userProjectsList = usersDBStore.userProjectsList;
 
     const currentUser = usersDBStore.currentUser;
     let joinDialogOpen:boolean = false;
@@ -65,7 +66,7 @@
     
 </div>
 
-<DebugPanel variables={[$myInvites, $selectedProjectId, $projectsStore, $userStore, $currentUser]} varNames={"$myInvites, $selectedProjectId, $projectsStore, $userStore, $currentUser"} />
+<DebugPanel variables={[$myInvites, $userProjectsList, $selectedProjectId, $projectsStore, $userStore, $currentUser]} varNames={"$myInvites, $userProjectsList, $selectedProjectId, $projectsStore, $userStore, $currentUser"} />
 
 <style>
     :root{

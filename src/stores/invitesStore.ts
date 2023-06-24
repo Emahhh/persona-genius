@@ -102,11 +102,20 @@ async function acceptInvite(inviteUID: string, myUserUID: string): Promise<strin
     return response.data.projectId
 }
 
-
-// TODO: completare e usarla in InfoEditor
 async function getInvite(inviteUID: string): Promise<Invitation> {
     // get an invite from the database
-    return {} as Invitation;
+    const inviteRef = ref(rtDatabase, `invites/${inviteUID}`);
+    try {
+        const snapshot = await get(inviteRef);
+        if (snapshot.exists()) {
+            return snapshot.val();
+        }
+        else {
+            throw new Error(`Invite ${inviteUID} does not exist`);
+        }
+    } catch (e) {
+        throw new Error(`Error getting invite ${inviteUID}: ${e}`);
+    }
 }
 
 

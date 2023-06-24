@@ -28,7 +28,15 @@
             sentInvites: {},
         };
 
-        editProject(newProjectId, newProject);
+        try {
+            await editProject(newProjectId, newProject);
+        } catch (error:any) {
+            alert("Error while creating project: " + error.message);
+            console.error("Error while creating project:", error);
+            selectedProjectId.set(undefined);
+            return;
+        }
+
         usersDBStore.addPrjToUser(uid, newProjectId);
         console.log("new project id: ", newProjectId);
         selectedProjectId.set(newProjectId);

@@ -2,7 +2,7 @@ import { app } from "../utils/firebaseConf";
 import { writable, get as getStore} from "svelte/store";
 import { getDatabase, ref, onValue, set, get, type DatabaseReference } from "firebase/database";
 import DEBUGMODE from "../DebugPanel.svelte";
-import type { Project, Persona, Invitation } from "../utils/interfaces";
+import type { Project, Persona } from "../utils/interfaces";
 import { usersDBStore } from "./usersDBStore";
 import { userStore } from "./loginStore";
 
@@ -17,6 +17,10 @@ const allProjectsRef = ref(rtDatabase, 'projects/'); // riferimento al nodo 'pro
 
 // SYNC
 
+async function onValueErrorCallback(error: Error) {
+    console.error('onValue: error getting data:', error);
+}
+
 // to keep the list of projects in sync with the database
 // triggerata: quando userProjects cambia (es: user ha creato un nuovo progetto)
 // o quando un singolo progetto (progetto modificato) cambia
@@ -26,12 +30,11 @@ usersDBStore.userProjectsList.subscribe((newUserProjectsList) => {
         projectsStore.set({});
         return;
     }
-
     for (const projectId of newUserProjectsList) {
         const projectRef = ref(rtDatabase, `projects/${projectId}`);
 
         onValue(projectRef, (snapshot) => {
-            console.log('change detected in project', projectId, 'updating projectsStore...');
+            console.log('change detected in project', projectId, 'updating projectsStore with the value of the project...');
 
             const projectValue = snapshot.val();
             if (!projectValue) {
@@ -55,7 +58,10 @@ usersDBStore.userProjectsList.subscribe((newUserProjectsList) => {
                 projects[projectId] = projectValue;
                 return projects;
             });
-        });
+
+        }, 
+        onValueErrorCallback
+        );
     }
 });
 
@@ -85,7 +91,8 @@ selectedProjectId.subscribe((newSelectedProjectId) => {
             return;
         }
         selectedProject.set(selectedProjectValue);
-    }
+    },
+    onValueErrorCallback
     );
 });
 
@@ -149,20 +156,20 @@ export async function editProject(projectId: string | undefined, newProject: Pro
 
 // edit project info
 export async function editProjectInfo(projectId: string | undefined, newProjectInfo: Project | undefined) {
-    if (!projectId || projectId === '' || !newProjectInfo || !newProjectInfo.prjName || !newProjectInfo.prjDescription) {
-        console.error('editProjectInfo: missing projectId or newProjectInfo. Cannot edit project.');
-        return;
+    if (!projectId || projectId === ''){
+        throw new Error('editProjectInfo: missing projectId. Cannot edit project info.');
+    } 
+    
+    if( !newProjectInfo || !newProjectInfo.prjName || !newProjectInfo.prjDescription) {
+        throw new Error('editProjectInfo: missing newProjectInfo. Cannot edit project info. Please fill all the fields!');
     }
     const prjNameRef: DatabaseReference = ref(rtDatabase, `projects/${projectId}/prjName`);
     const prjDescriptionRef: DatabaseReference = ref(rtDatabase, `projects/${projectId}/prjDescription`);
 
-    try {
-        await set(prjNameRef, newProjectInfo.prjName);
-        await set(prjDescriptionRef, newProjectInfo.prjDescription);
-        console.log('Project info edited successfully.');
-    } catch (error) {
-        console.error('Project info editing failed: ', error);
-    }
+
+    await set(prjNameRef, newProjectInfo.prjName);
+    await set(prjDescriptionRef, newProjectInfo.prjDescription);
+    console.log('Project info edited successfully.');
 }
 
 // delete project
@@ -232,8 +239,13 @@ function filterProjects(unfilteredProjects: any) { // TODO: rimuovere?
 function checkProjectRights(prj: Project):boolean {
 
     const currUserID = getStore(userStore)?.uid;
+    if(!currUserID){
+        console.error('checkProjectRights: user not logged in');
+        return false;
+    }
+
     if(currUserID == prj.owner) return true;
-    //TODO: handle invites if(prj.invitedUsers.includes(currUserID)) return true;
+    if( prj.collaborators && prj.collaborators[currUserID]) return true;
 
     return false;
 }

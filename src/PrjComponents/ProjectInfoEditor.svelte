@@ -10,6 +10,7 @@
     import { invitesStore } from "../stores/invitesStore";
     import { get } from "firebase/database";
     import { usersDBStore } from "../stores/usersDBStore";
+    import CollaboratorsEditor from "./CollaboratorsEditor.svelte";
 
     export let infoEditMode: boolean;
 
@@ -24,8 +25,18 @@
         }
     }
 
-    function handleConfirmEdit(): any {
-        editProjectInfo($selectedProjectId, $selectedProject);
+    async function handleConfirmEdit(){
+        try{
+            await editProjectInfo($selectedProjectId, $selectedProject);
+        } catch (error:any) {
+            if (error.message === 'editProjectInfo: missing projectId. Cannot edit project info.'){
+                alert("Please fill in all the fields!");
+            }else{
+                alert("Error while editing project: " + error.message);
+            }
+            console.error("Error while editing project:", error);
+            cancelEditInfo()
+        }
         infoEditMode = false;
     }
 
@@ -48,22 +59,7 @@
     }
 
 
-    async function handleCreateInvite() {
-        if (!$selectedProjectId || !$selectedProject?.prjName) {
-            console.error("Error while inviting: no project selected");
-            return;
-        }
-        
-        const timeToExpire = 1000 * 60 * 60 * 24 * 3; // 3 days 
-        const expirationDate: string = new Date(Date.now() + timeToExpire).toString();
-        const uid:string = await invitesStore.createInvite($selectedProjectId, $selectedProject?.prjName, expirationDate);
-        if (!uid) {
-            console.error("Error while inviting: no uid returned");
-            return;
-        }
-        //alert("Invite link: " + window.location.origin + "/#/invite/" + uid);
-        alert("Invite code: " + uid); 
-    }
+
 </script>
 
 {#if !$selectedProjectId|| !$selectedProject}
@@ -85,38 +81,7 @@
 
             <hr>
 
-            <p><b>Collaborators</b> added to your project:</p>
-            <ul>
-                {#if !$selectedProject.collaborators || Object.values($selectedProject.collaborators).length === 0}
-                    <li>No user added to your project yet.</li>
-                {:else}
-                    {#each Object.keys($selectedProject.collaborators) as collID}
-                        <li>{#await usersDBStore.getUsername(collID) }
-                                Loading...
-                            {:then userName}
-                                {userName ?? "unknown"}
-                            {:catch error}
-                                {collID}
-                            {/await}
-                        </li>
-                        <!-- TODO: addremove button-->
-                    {/each}
-                {/if}
-            </ul>
-
-            <hr>
-            
-            <p>These are the <b>invites</b> you have created:</p>
-                <ul>
-                    {#if !$selectedProject.sentInvites || Object.values($selectedProject.sentInvites).length === 0}
-                        <li>No invite valid at the moment</li>
-                    {:else}
-                        {#each Object.keys($selectedProject.sentInvites) as invite}
-                            <li>{invite}</li> <!-- TODO: aggiungere expiration e altri dati-->
-                        {/each}
-                    {/if}
-                    <li><a href="#" on:click={()=> handleCreateInvite()}><b>Create new invite...</b></a></li>
-                </ul>
+            <CollaboratorsEditor />
         
 
             <hr>
