@@ -114,5 +114,27 @@ async function getInvite(inviteUID: string): Promise<Invitation> {
     }
 }
 
+async function deleteInvite(invID: string): Promise<void> {
+    // delete an invite from the database
+    const uid = getStore(userStore)?.uid;
+    const inviteRef = ref(rtDatabase, `invites/${invID}`);
+    const projectRef = ref(rtDatabase, `projects/${(await get(inviteRef)).val().projectId}`);
+    const sentInvitesRef = ref(rtDatabase, `projects/${(await get(inviteRef)).val().projectId}/sentInvites/${invID}`);
 
-export const invitesStore = { createInvite, acceptInvite, getInvite };
+    if (!(await get(projectRef)).exists()) {
+        throw new Error(`Project ${invID} does not exist`);
+    }
+    if( (await get(ref(rtDatabase, `projects/${(await get(inviteRef)).val().projectId}/owner`))).val() !== uid) {
+        throw new Error(`User ${uid} is not the owner of project ${invID}`);
+    }
+
+    try {
+        await set(sentInvitesRef, null);
+        await set(inviteRef, null);
+    } catch (e) {
+        throw new Error(`Error deleting invite: ${e}`);
+    }
+}
+
+
+export const invitesStore = { createInvite, acceptInvite, getInvite, deleteInvite };

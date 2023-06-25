@@ -42,7 +42,7 @@
         </span> 
 
         <br />
-        <span class="createdBy">Create new project or join one.</span>
+        <span class="createdBy">Create a new project or join one.</span>
     </div>
     
     {#each Object.entries($projectsStore) as [projectId, project]} <!-- TODO: show loading? -->
@@ -101,7 +101,7 @@
         font-size: 16px;
         cursor: pointer;
         
-        background-color: rgba(255, 255, 255, 0.634);
+        background-color: #f5f5f5e7;
         border-radius: 12px;
         box-shadow: 0 0 6px rgba(0, 0, 0, 0.376);
         transition: box-shadow 0.3s ease; /* per l'hover */
@@ -152,4 +152,5 @@
         background-color: var(--primary);
         color: white;
     }
+
 </style>

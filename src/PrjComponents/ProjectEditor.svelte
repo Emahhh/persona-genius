@@ -193,6 +193,11 @@
                     {/if}
                     
                 </div>
+            {:else}
+                <span style = "text-align: center; margin: auto; padding: 60px; width: 100%;">
+                    <h3>No persona selected</h3> 
+                    <p>Select a persona from the list on the left, or create a new one.</p>
+                </span>
             {/if}
 
 
@@ -265,11 +270,6 @@
         transition: background-color 0.3s;
     }
 
-    .persona-item {
-        color: whitesmoke;
-        text-shadow: 0 0 5px #0000009e;
-    }
-
     .persona-item img {
         width: 40px;
         height: 40px;
@@ -282,7 +282,8 @@
     .selected {
         background-color: var(--primary);
         box-shadow: 0 0 5px 0 #2a55306f;
-        
+        color: white;
+        text-shadow: 0 0 5px var(--shadow-greenish);
     }
 
     .editor-area {
@@ -300,6 +301,9 @@
         margin-bottom: 20px;
         border-radius: 15px;
         box-shadow: 0 0 10px 0 #2879657c;
+        
+        color: white;
+        text-shadow: 0 0 5px var(--shadow-greenish);
     }
 
     .add-new-persona img {
