@@ -210,7 +210,7 @@
     .column {
         padding: 10px;
         background-color: #38650b3e;
-        width: 30%;
+        width: 40%;
         height: 100%;
         overflow-y: auto;
         box-shadow: 0 0 10px 0 #9dbde06f;
@@ -218,6 +218,19 @@
         margin-left: 10px;
 
     }
+
+    @media (max-width: 800px) {
+        .column {
+            width: 100%;
+            margin-left: 0;
+        }
+
+        .persona-area {
+            flex-direction: column;
+        }
+    }
+
+
 
     .persona-item {
         display: flex;
@@ -248,7 +261,8 @@
     .editor-area {
         padding: 10px;
         padding-left: 25px;
-        width: 100vh; /* TODO: sure? */
+        padding-right: 25px;
+        width: 100%;
     }
 
     .add-new-persona {
