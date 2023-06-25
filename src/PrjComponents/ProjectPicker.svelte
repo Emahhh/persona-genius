@@ -10,6 +10,7 @@
     import { usersDBStore } from "../stores/usersDBStore";
 
     import JoinOrCreateProject from "./JoinOrCreateProject.svelte";
+    import UserInfo from "../UserInfo.svelte";
 
     const userProjectsList = usersDBStore.userProjectsList;
 
@@ -36,7 +37,10 @@
     </header>
     <!-- svelte-ignore a11y-click-events-have-key-events -->
     <div class="project new-project" on:click={() => handleAddButton()}>
-        <span class="projectName">+</span> 
+        <span class="projectName">
+            <img src="/src/assets/add-circle-fill.svg" alt="add" width="50px" height="50px" />
+        </span> 
+
         <br />
         <span class="createdBy">Create new project or join one.</span>
     </div>
@@ -45,15 +49,15 @@
         {#if projectId && project && project.prjName && project.owner}
             <!-- svelte-ignore a11y-click-events-have-key-events -->
             <div class="project" on:click={() => selectedProjectId.set(projectId)}>
-                <span class="projectName">{project.prjName}</span>
+                <span class="projectName"><b>{project.prjName}</b></span>
                 <br />
 
                 {#await usersDBStore.getUsername(project.owner)}
-                    <span class="loading">Loading...</span> <!--TODO: remove message while loading and while error so that its nicer-->
                 {:then username}
-                    <span class="createdBy">Created by<br /><b>{username}</b></span> <!-- TODO: check if created by ME-->
+                    <span class="createdBy">Created by<br /><b>
+                        { username === $currentUser?.displayUsername ? "Me" : username }
+                    </b></span> 
                 {:catch error}
-                    <span class="error">Error: {error.message}</span>
                 {/await}
 
             </div>
@@ -141,6 +145,7 @@
     .createdBy {
         font-size: 10px;
         font-weight: normal;
+        text-align: center;
     }
 
     .new-project {

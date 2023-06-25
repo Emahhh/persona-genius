@@ -26,7 +26,9 @@
 
 <nav>
     <ul>
+        <li><img src="src/assets/icons8-user-group-100.png" alt="logo" width="50" height="50"></li>
         <li><strong>Persona Genius</strong></li>
+
         <!-- TODO: add logo-->
     </ul>
     <ul>
@@ -36,3 +38,10 @@
         </li>
     </ul>
 </nav>
+
+<style>
+    nav li {
+        display: inline-block;
+        padding: 10px;
+    }
+</style>

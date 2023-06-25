@@ -1,6 +1,6 @@
 <script lang="ts">
 
-    export let DEBUGMODE = true; // METTERE A FALSE PER NASCONDERE IL PANNELLO DI DEBUG
+    export let DEBUGMODE = false; // METTERE A FALSE PER NASCONDERE IL PANNELLO DI DEBUG
 
     export let variables: any[] = []; // input
     export let varNames: string = ""; // input

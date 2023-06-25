@@ -102,9 +102,15 @@
 <div class="main-container"> <!-- EDITOR AREA--------------------------------------------------->
 
 <header class="panel-bar">
-    <a  href="#" on:click={() => selectedProjectId.set(undefined)}  >    Choose another project    </a> <!-- TODO: add back icon-->
-    <h5>You are editing {$selectedProject?.prjName}</h5>
-    <a  href="#" on:click={() => infoEditMode = true}> Edit project info</a>
+    <a  href="#" on:click={() => selectedProjectId.set(undefined)}  >   
+        <img src="/src/assets/arrow-go-back-line.svg" alt="go back" width="20px" height="20px" />
+        Choose another project   
+    </a> 
+    <h5>You are editing <i>{$selectedProject?.prjName}</i></h5>
+    <a  href="#" on:click={() => infoEditMode = true}>
+        Edit project info
+        <img src="/src/assets/file-edit-line.svg" alt="edit" width="20px" height="20px" />
+    </a>
 </header>
 
 {#if $selectedProjectId === undefined || $selectedProject === undefined}
@@ -118,11 +124,14 @@
 
                 {#if isLoading}
                     <div class="persona-item add-new-persona" aria-busy="true">
-                        + Add new persona
+                        <img src="/src/assets/user-add-line.svg" alt="edit" width="20px" height="20px" />
+                        Add new persona
                     </div>
                 {:else}
-                    <div class="persona-item add-new-persona" on:click={() => handleCreateNewPersona() }>
-                        + Add new persona
+                    <!-- svelte-ignore a11y-click-events-have-key-events -->
+                    <div class="persona-item add-new-persona" on:click={() => handleCreateNewPersona() }  data-placement="bottom" data-tooltip="Uses AI. Based on project description." style="border: none;">
+                        <img src="/src/assets/user-add-line.svg" alt="edit" />
+                        Add new persona
                     </div>
                 {/if}
 
@@ -146,9 +155,12 @@
                 {/if}
             </div>
 
-
-
-            {#if selectedPersona} <!-- PARTE DESTRA, CHE SI OCCUPA DI MOSTRARE I DETTAGLI DELLA PERSONA SELEZIONATA E EDITOR ----------------------------------------- -->
+            {#if isLoading} <!-- PARTE DESTRA, CHE SI OCCUPA DI MOSTRARE I DETTAGLI DELLA PERSONA SELEZIONATA E EDITOR ----------------------------------------- -->
+                <span style = "text-align: center; margin: auto; padding: 60px; width: 100%;">
+                    <h3 aria-busy="true">AI is generating a new persona for you...</h3> 
+                    <p>This may take a while. The persona is on your project description, so be sure to write a good one! You can edit it whenever you want via the "Edit project info" button.</p>
+                </span>
+            {:else if selectedPersona} 
                 <div class="editor-area">
 
                     {#if editPersonaMode} <!-- EDIT PERSONA MODE ON -->
@@ -158,7 +170,11 @@
                     {:else} <!-- EDIT MODE OFF -->
                         <div class="persona-bar">
                             <h3>{selectedPersona.name}</h3>
-                            <a class="edit-button" role="button" href="#" on:click={() => editPersonaMode = true}>Edit this Persona</a>
+                            <a class="edit-button" role="button" href="#" on:click={() => editPersonaMode = true}>
+                                Edit this Persona
+                                <img src="/src/assets/edit-2-line.svg" alt="edit" width="20px" height="20px"  />
+
+                            </a>
                         </div>
 
 
@@ -178,6 +194,9 @@
                     
                 </div>
             {/if}
+
+
+
         </div>
 
 
@@ -205,17 +224,20 @@
         height: 100%;
         width: 100%;
 
+        overflow: visible;
+
     }
 
     .column {
         padding: 10px;
-        background-color: #38650b3e;
+        background-color: var(--secondary-light);
         width: 40%;
         height: 100%;
         overflow-y: auto;
-        box-shadow: 0 0 10px 0 #9dbde06f;
+        box-shadow: 0 0 7px 0 var(--shadow-greenish);
         border-radius: 20px;
         margin-left: 10px;
+        margin-top: 6px;
 
     }
 
@@ -238,9 +260,14 @@
         margin-bottom: 10px;
         cursor: pointer;
         padding: 5px;
-        border-radius: 5px;
+        border-radius: 10px;
 
         transition: background-color 0.3s;
+    }
+
+    .persona-item {
+        color: whitesmoke;
+        text-shadow: 0 0 5px #0000009e;
     }
 
     .persona-item img {
@@ -248,12 +275,12 @@
         height: 40px;
         border-radius: 50%;
         margin-right: 10px;
-        background-color: #ccc; /* Aggiungi lo sfondo */
-        box-shadow: 0 0 5px 0 #9dbde06f;
+        background-color: #ffffffaa; /* Aggiungi lo sfondo */
+        box-shadow: 0 0 5px 0 var(--shadow-greenish);
     }
 
     .selected {
-        background-color: #589d61;
+        background-color: var(--primary);
         box-shadow: 0 0 5px 0 #2a55306f;
         
     }
@@ -267,12 +294,18 @@
 
     .add-new-persona {
         font-weight: bold;
-        background-color: #175b086f;
+        background-color: var(--primary);
         height: 80px;
         justify-content: center;
         margin-bottom: 20px;
         border-radius: 15px;
         box-shadow: 0 0 10px 0 #2879657c;
+    }
+
+    .add-new-persona img {
+        background-color: transparent;
+        box-shadow: none;
+        height: 30px;
     }
 
     .edit-button{

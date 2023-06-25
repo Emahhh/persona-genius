@@ -1,8 +1,16 @@
 /* TODO: dark mode? disattivare? */
 
+html, body {
+  height: 100%;
+}
 
 body {
-  background-image: linear-gradient(80deg, #79e8a29a 0%, #8fd2f4ae 100%);
+  background-image: linear-gradient(80deg, #79e8a29a 15%, #8fd2f4ae 90%);
+
+
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-attachment: fixed;
 
   font-family: 'Roboto', sans-serif;
   font-size: 16px;
@@ -27,8 +35,8 @@ nav {
   min-height: 65vh;
 
   border-radius: 20px;
-  background-color: #f2f2f2b4;
-  box-shadow: 0 0 10px rgba(0, 0, 0, 0.317);
+  background-color: #fafff9a9;
+  box-shadow: 0 0 10px var(--shadow-greenish);
 
 }
 
@@ -38,8 +46,8 @@ nav {
   justify-content: space-between;
   align-items: center;
   padding: 10px;
-  background-color: #def3c981;
-  box-shadow: 0 0 10px 0 #3a413a41;
+  background-color: var(--secondary-light);
+  box-shadow: 0 0 5px 0 var(--shadow-greenish);
   margin: auto;
   margin-top: 30px;
   border-radius: 20px;
@@ -63,34 +71,20 @@ nav {
 
 /* COLOR THEMING */
 
+:root{
+  --secondary-light: #b7e4c798;
+  --shadow-greenish: #081c157a;
+
+}
+
 /* Green Light scheme (Default) */
 /* Can be forced with data-theme="light" */
 [data-theme="light"],
 :root:not([data-theme="dark"]) {
-  --primary: #43a047;
-  --primary-hover: #388e3c;
-  --primary-focus: rgba(67, 160, 71, 0.125);
-  --primary-inverse: #FFF;
-}
-
-/* Green Dark scheme (Auto) */
-/* Automatically enabled if user has Dark mode enabled */
-@media only screen and (prefers-color-scheme: dark) {
-  :root:not([data-theme]) {
-    --primary: #43a047;
-    --primary-hover: #4caf50;
-    --primary-focus: rgba(67, 160, 71, 0.25);
-    --primary-inverse: #FFF;
-  }
-}
-
-/* Green Dark scheme (Forced) */
-/* Enabled if forced with data-theme="dark" */
-[data-theme="dark"] {
-  --primary: #43a047;
-  --primary-hover: #4caf50;
-  --primary-focus: rgba(67, 160, 71, 0.25);
-  --primary-inverse: #FFF;
+  --primary: #52B788;
+  --primary-hover: #40916C;
+  --primary-focus: #74c69d91;
+  --primary-inverse: #f6fff7;
 }
 
 /* Green (Common styles) */

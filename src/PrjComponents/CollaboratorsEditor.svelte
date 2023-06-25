@@ -96,11 +96,15 @@
                     <a href="#" on:click={() => navigator.clipboard.writeText(inviteCode)}>Copy
                         <img src="/src/assets/clipboard.svg" alt="Copy to clipboard" />
                     </a>
+                    - 
+                    <a href="#" on:click={() => invitesStore.deleteInvite(inviteCode)}>Delete</a>
 
 
                     {#await invitesStore.getInvite(inviteCode) ?? "unknown"}
                     {:then invVal}
-                        <br /> Expires on: { new Date(invVal.expiration).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric', hour: 'numeric', minute: 'numeric' }) ?? "unknown"}
+                        <br /> 
+                        { Date.now() > invVal.expiration ? "expired on:" : "valid until: "}
+                        { new Date(invVal.expiration).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric', hour: 'numeric', minute: 'numeric' }) ?? "unknown"}
                     {/await}
                 
                 </li>
