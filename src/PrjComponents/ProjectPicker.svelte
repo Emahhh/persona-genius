@@ -145,7 +145,7 @@
     }
 
     .new-project {
-        background-color: #008550b5;
+        background-color: var(--primary);
         color: white;
     }
 </style>

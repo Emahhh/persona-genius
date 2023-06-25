@@ -154,9 +154,11 @@
     .dialog {
         display: flex;
         width: 60vw;
+        max-width: 1000px;
+        min-width: 600px;
 
         padding: 20px;
-        background-color: #f2f2f2;
+        background-color: #a8d7b9;
         border-radius: 8px;
     }
 
@@ -186,6 +188,25 @@
         background-color: #ffffff;
         border-radius: 8px;
         margin-left: 20px;
+    }
+
+    @media (max-width: 800px) {
+        .dialog {
+            flex-direction: column;
+            width: 95vw;
+            min-width: 300px;
+            max-width: 100%;
+            padding: 10px;
+        }
+
+        .left-half {
+            margin-right: 0px;
+            margin-bottom: 20px;
+        }
+
+        .right-half {
+            margin-left: 0px;
+        }
     }
 
 </style>

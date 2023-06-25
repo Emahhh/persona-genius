@@ -1,5 +1,6 @@
 <script lang="ts">
     import { userStore } from "./stores/loginStore";
+    import { usersDBStore } from "./stores/usersDBStore";
 
 /*     // initializes the user entry in the "users" database, if it doesn't exist yet
     function initializeUsersEntry(): void {
@@ -29,9 +30,9 @@
         <!-- TODO: add logo-->
     </ul>
     <ul>
-        Logged in as <i> {$userStore?.displayName ?? $userStore?.email ?? "unknown"} </i>
+        <i> {$userStore?.displayName ?? $userStore?.email ?? "unknown"} </i>
         <li>
-            <a href="#" role="button" on:click={handleLogout}>Logout</a>
+            <a href="#" role="button" class="secondary" on:click={handleLogout}>Logout</a>
         </li>
     </ul>
 </nav>

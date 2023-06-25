@@ -122,13 +122,12 @@
 
 
 
+<div class="main-container"> <!-- EDITOR AREA--------------------------------------------------->
 
 <header class="panel-bar">
-    <a role="button" href="#"    class="back-button secondary"  on:click={() => selectedProjectId.set(undefined)}  >    Back to project picker     </a> <!-- TODO: add back icon-->
-    <a role="button" href="#" on:click={() => infoEditMode = true}> Edit project info</a>
-    <br />
-    <h5>This is the project Editor for {$selectedProject?.prjName}</h5>
-
+    <a  href="#" on:click={() => selectedProjectId.set(undefined)}  >    Choose another project    </a> <!-- TODO: add back icon-->
+    <h5>You are editing {$selectedProject?.prjName}</h5>
+    <a  href="#" on:click={() => infoEditMode = true}> Edit project info</a>
 </header>
 
 {#if $selectedProjectId === undefined || $selectedProject === undefined}
@@ -137,7 +136,6 @@
     $selectedProject: {$selectedProject}
 
 {:else} 
-    <div class="main-container container"> <!-- EDITOR AREA--------------------------------------------------->
         <div class="persona-area">
             <div class="column"><!-- PARTE SINISTRA, CHE SI OCCUPA DI MOSTRARE LA LISTA DELLE PERSONE E DI GESTIRE LA SELEZIONE ----------------------------------------- -->
 
@@ -190,6 +188,7 @@
                             <label>Job</label>
                             <input type="text" bind:value={selectedPersona.job} autocomplete="off" />
                             <!-- TODO: il resto-->
+                            <hr />
                             <label>Import persona from JSON</label>
                             <textarea bind:value={jsonPersona} />
 
@@ -200,9 +199,12 @@
 
 
                     {:else} <!-- EDIT MODE OFF -->
-                        <button class="edit-button" on:click={() => editPersonaMode = true}>Edit</button>
+                        <div class="persona-bar">
+                            <h3>{selectedPersona.name}</h3>
+                            <a class="edit-button" role="button" href="#" on:click={() => editPersonaMode = true}>Edit this Persona</a>
+                        </div>
 
-                        <h3>Dettagli Persona</h3>
+
                         <p><strong>Nome:</strong> {selectedPersona.name}</p>
                         <p><strong>Job:</strong> {selectedPersona.job}</p>
                         <p>
@@ -220,7 +222,6 @@
                 </div>
             {/if}
         </div>
-    </div>
 
 
     {#if infoEditMode} <!-- EDITOR MODAL --------------------------------------------------->
@@ -228,6 +229,7 @@
     {/if}
 
 {/if}
+</div>
 
 
 
@@ -242,33 +244,45 @@
         justify-content: space-between;
         align-items: center;
         padding: 10px;
-        background-color: #def3c9a8;
-        box-shadow: 0 0 10px 0 #9dbde06f;
-        width: 80%;
+        background-color: #def3c981;
+        box-shadow: 0 0 10px 0 #3a413a41;
         margin: auto;
         margin-top: 30px;
-        border-radius: 10px;
+        border-radius: 20px;
+        margin-bottom: 20px;
     }
 
-    .back-button {
-        width: 300px;
-        font-size: 1.2em;
+    .panel-bar a {
+        height: fit-content;
+        padding: 12px;
+        color: #000000;
+        /*TODO: icone e background-color */
+    }
+
+    .panel-bar h5 {
         margin: 0;
     }
+
+
+
     .persona-area {
         display: flex;
         overflow: hidden;
-        width: 100%; 
         height: 100%;
+        width: 100%;
+
     }
 
     .column {
         padding: 10px;
-        background-color: #def3c9;
+        background-color: #38650b3e;
         width: 30%;
-        height: 100vh;
+        height: 100%;
         overflow-y: auto;
         box-shadow: 0 0 10px 0 #9dbde06f;
+        border-radius: 20px;
+        margin-left: 10px;
+
     }
 
     .persona-item {
@@ -292,8 +306,9 @@
     }
 
     .selected {
-        background-color: #9dbde06f;
-        box-shadow: 0 0 5px 0 #9dbde06f;
+        background-color: #589d61;
+        box-shadow: 0 0 5px 0 #2a55306f;
+        
     }
 
     .editor-area {
@@ -305,25 +320,27 @@
     .add-new-persona {
         font-weight: bold;
         background-color: #175b086f;
+        height: 80px;
+        justify-content: center;
+        margin-bottom: 20px;
+        border-radius: 15px;
+        box-shadow: 0 0 10px 0 #2879657c;
     }
 
     .edit-button{
-        /* in alto a dx*/
-        width: 100px; /* TODO: rendere responsive*/
+        height: fit-content;
+        width: fit-content;
     }
 
     .persona-bar {
         display: flex;
+        justify-content: space-between;
     
         width: 100%;
         margin-bottom: 20px;
         border-bottom: 1px solid #ccc;
     }
 
-    .project-info-editor {
-        width: 85%;
-        max-width: 800px;
-    }
 
     .delete-button {
         background-color: #c30000;
