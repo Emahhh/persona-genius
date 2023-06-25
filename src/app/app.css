@@ -33,6 +33,32 @@ nav {
 }
 
 
+.panel-bar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px;
+  background-color: #def3c981;
+  box-shadow: 0 0 10px 0 #3a413a41;
+  margin: auto;
+  margin-top: 30px;
+  border-radius: 20px;
+  margin-bottom: 20px;
+}
+
+.panel-bar a {
+  height: fit-content;
+  padding: 12px;
+  color: #000000;
+  /*TODO: icone e background-color */
+}
+
+.panel-bar h5 {
+  margin: 0;
+}
+
+
+
 
 
 /* COLOR THEMING */

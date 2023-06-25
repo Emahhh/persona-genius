@@ -12,6 +12,8 @@
     import { onMount } from "svelte";
     import {jsonToPersona, type Persona, } from "../utils/interfaces";
     import { generatePersona } from "../utils/apiRequests";
+    import PersonaEditor from "./PersonaEditor.svelte";
+    import { bind } from "svelte/internal";
 
     let selectedPersonaId: string | undefined = undefined;
     let selectedPersona: Persona | undefined = undefined;
@@ -49,21 +51,6 @@
     }
 
 
-    // salva il progetto nel database, dopo averlo editato TODO: farlo in realtime?
-    let jsonPersona: string = "";
-    function handleSavePersona() {
-        if (jsonPersona && jsonPersona !== "") { // IMPORT PERSONA FROM JSON, if there is one
-            try {
-                selectedPersona = jsonToPersona(jsonPersona);
-            } catch (e) {
-                console.error("error parsing jsonPersona: ", e);
-                alert ("error parsing jsonPersona: " + e);
-            }
-        }
-
-        setPersona($selectedProjectId, selectedPersonaId, selectedPersona);
-        editPersonaMode = false;
-    }
 
 
     // crea una nuova persona vuota e la aggiunge al progetto
@@ -103,16 +90,6 @@
         }
     }
 
-    // deletes the persona from the project
-    function handleDeletePersona(projectId: string | undefined, personaId: string | undefined): void {
-        if (!confirm(`Are you sure you want to delete this persona named "${selectedPersona?.name}" from this project?`)) {
-            return;
-        }
-        deletePersona(projectId, personaId);
-
-        selectPersona(getFirstPersonaId());
-        editPersonaMode = false;
-    }
 
 
 
@@ -175,28 +152,8 @@
                 <div class="editor-area">
 
                     {#if editPersonaMode} <!-- EDIT PERSONA MODE ON -->
-                        <div class="persona-bar">
-                            <h3>Modifica Persona</h3>
-                            <button class="edit-button" on:click={() => handleSavePersona()}>Save</button>
-                            <button class="edit-button secondary" on:click={() => handleCancel()}>Cancel</button>
-                        </div>
-                        
-                        <p>Questo è il form per modificare la persona {selectedPersona.name}</p>
-                        <form>
-                            <label>Name</label>
-                            <input type="text" bind:value={selectedPersona.name} autocomplete="off" />
-                            <label>Job</label>
-                            <input type="text" bind:value={selectedPersona.job} autocomplete="off" />
-                            <!-- TODO: il resto-->
-                            <hr />
-                            <label>Import persona from JSON</label>
-                            <textarea bind:value={jsonPersona} />
 
-                            <button class="delete-button" on:click={() => handleDeletePersona($selectedProjectId, selectedPersonaId)}>Delete this persona</button>
-                        </form>
-
-
-
+                        <PersonaEditor bind:editPersonaMode={editPersonaMode} bind:selectedPersona={selectedPersona} bind:selectedPersonaId={selectedPersonaId} handleCancel={handleCancel} selectPersona={selectPersona} getFirstPersonaId={getFirstPersonaId} />
 
                     {:else} <!-- EDIT MODE OFF -->
                         <div class="persona-bar">
@@ -239,29 +196,6 @@
 
 
 <style>
-    .panel-bar {
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        padding: 10px;
-        background-color: #def3c981;
-        box-shadow: 0 0 10px 0 #3a413a41;
-        margin: auto;
-        margin-top: 30px;
-        border-radius: 20px;
-        margin-bottom: 20px;
-    }
-
-    .panel-bar a {
-        height: fit-content;
-        padding: 12px;
-        color: #000000;
-        /*TODO: icone e background-color */
-    }
-
-    .panel-bar h5 {
-        margin: 0;
-    }
 
 
 
@@ -342,7 +276,5 @@
     }
 
 
-    .delete-button {
-        background-color: #c30000;
-    }
+
 </style>

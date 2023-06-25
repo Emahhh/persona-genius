@@ -28,11 +28,12 @@
 {/if}
 
 
-<div class="panelTitle">
-    <h4>Project Picker: Apri un progetto, o creane uno nuovo.</h4>
-</div>
 
-<div class="main-container"> <!-- TODO: sostituire con CSS migliore -->
+
+<div class="main-container"> 
+    <header class="panel-bar">
+        <h5>Open a project or create a new one</h5>
+    </header>
     <!-- svelte-ignore a11y-click-events-have-key-events -->
     <div class="project new-project" on:click={() => handleAddButton()}>
         <span class="projectName">+</span> 
@@ -65,15 +66,11 @@
 <DebugPanel variables={[$userProjectsList, $selectedProjectId, $projectsStore, $userStore, $currentUser]} varNames={"$userProjectsList, $selectedProjectId, $projectsStore, $userStore, $currentUser"} />
 
 <style>
-
-    .panelTitle {
+    .panel-bar {
+        width: 100%;
+        margin-top: 0px;
         margin-bottom: 10px;
-        margin-top: 20px;
-        justify-content: center;
-        display: flex;
-    }
-    .panelTitle h4 {
-        margin-bottom: 5px;
+        padding: 25px;
     }
 
     .main-container {
@@ -82,6 +79,8 @@
         justify-content: left;
         align-items: start;
         align-content: start;
+
+        margin-top: 60px;
     }
 
 
