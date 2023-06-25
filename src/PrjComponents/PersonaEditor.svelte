@@ -61,19 +61,37 @@
         </span>
     </div>
 
-    <p>Questo è il form per modificare la persona {selectedPersona.name}</p>
     <form>
-        <label>Name</label>
-        <input type="text" bind:value={selectedPersona.name} autocomplete="off" />
-        <label>Job</label>
-        <input type="text" bind:value={selectedPersona.job} autocomplete="off" />
-        <!-- TODO: il resto-->
+        <label for="name">Name</label>
+        <input type="text" id="name" bind:value={selectedPersona.name} autocomplete="off" placeholder="Enter the name of the persona">
+        
+        <label for="job">Job</label>
+        <input type="text" id="job" bind:value={selectedPersona.job} autocomplete="off" placeholder="Enter the job or occupation of the persona">
+        
+        <label for="description">Description</label>
+        <textarea id="description" bind:value={selectedPersona.description} autocomplete="off" placeholder="Describe the persona in a few words or sentences"></textarea>
+        
+        <label for="frustrations">Frustrations</label>
+        <textarea id="frustrations" bind:value={selectedPersona.frustrations} autocomplete="off" placeholder="List the frustrations or pain points experienced by the persona"></textarea>
+        
+        <label for="goals">Goals</label>
+        <textarea id="goals" bind:value={selectedPersona.goals} autocomplete="off" placeholder="Specify the primary goals or objectives of the persona"></textarea>
+        
+        <label for="image">Image URL</label>
+        <input type="text" id="image" bind:value={selectedPersona.image} autocomplete="off" placeholder="Paste the URL of an image representing the persona">
+        
+        <label for="needs">Needs</label>
+        <textarea id="needs" bind:value={selectedPersona.needs} autocomplete="off" placeholder="Describe the specific needs or requirements of the persona"></textarea>
+        
+    
         <hr />
-        <label>Import persona from JSON</label>
-        <textarea bind:value={jsonPersona} autocomplete="off"/>
-
+    
+        <label for="jsonPersona">Import persona from JSON</label>
+        <textarea id="jsonPersona" bind:value={jsonPersona} autocomplete="off" placeholder="Insert a valid JSON. This will override everything."></textarea>
+    
         <button class="delete-button" on:click={() => handleDeletePersona($selectedProjectId, selectedPersonaId)}>Delete this persona</button>
     </form>
+    
 
 {/if}
 
