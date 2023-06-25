@@ -1,0 +1,31 @@
+{
+    "theme_color": "#79e8a29a",
+    "background_color": "#79e8a29a",
+    "display": "standalone",
+    "scope": "/",
+    "start_url": "/",
+    "name": "Persona Genius",
+    "short_name": "A collaborative AI-powered tool to help you create and manage your User Personas.",
+    "icons": [
+        {
+            "src": "/public/pwa-icons/icon-192x192.png",
+            "sizes": "192x192",
+            "type": "image/png"
+        },
+        {
+            "src": "/public/pwa-icons/icon-256x256.png",
+            "sizes": "256x256",
+            "type": "image/png"
+        },
+        {
+            "src": "/public/pwa-icons/icon-384x384.png",
+            "sizes": "384x384",
+            "type": "image/png"
+        },
+        {
+            "src": "/public/pwa-icons/icon-512x512.png",
+            "sizes": "512x512",
+            "type": "image/png"
+        }
+    ]
+}

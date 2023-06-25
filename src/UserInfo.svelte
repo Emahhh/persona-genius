@@ -1,19 +1,12 @@
 <script lang="ts">
     import { userStore } from "./stores/loginStore";
     import { usersDBStore } from "./stores/usersDBStore";
+    import {isOnline}from "./utils/offlineHandle";
+    const currentUserStore = usersDBStore?.currentUser;
+    const displayName = $currentUserStore?.displayUsername ?? $userStore?.displayName ?? $userStore?.email ?? "unknown";
+    
 
-/*     // initializes the user entry in the "users" database, if it doesn't exist yet
-    function initializeUsersEntry(): void {
-        if (!$userStore){
-            console.log("Error: user undefined.");
-            return;
-        }
 
-        const newUsersEntry = {
-            name: $userStore?.displayName,
-        };
-
-    } */
 
 
     function handleLogout() {
@@ -32,7 +25,14 @@
         <!-- TODO: add logo-->
     </ul>
     <ul>
-        <i> {$userStore?.displayName ?? $userStore?.email ?? "unknown"} </i>
+        <li>
+            {#if !$isOnline}
+            Offline!
+            {/if}
+        </li>
+    </ul>
+    <ul>
+        <i> { displayName} </i>
         <li>
             <a href="#" role="button" class="secondary" on:click={handleLogout}>Logout</a>
         </li>
