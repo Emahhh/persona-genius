@@ -1,47 +1,80 @@
-# Svelte + TS + Vite
+---
+# compila pdf con:
+# pandoc readme.md -o relazione.pdf --from markdown --template eisvogel --listings
+titlepage: true
+title: "Persona Genius"
+subtitle: "Progetto per il corso di Sviluppo Applicazioni Web - UniPi 22/23"
+author: [Emanuele Buonaccorsi - 598855]
+lang: "it"
 
-This template should help get you started developing with Svelte and TypeScript in Vite.
+titlepage-color: "d8f3dc"
+listings-disable-line-numbers: true
+titlepage-text-color: "081c15"
+titlepage-rule-color: "360049"
+titlepage-rule-height: 0
 
-## Recommended IDE Setup
+toc-own-page: true
+toc-title: "Indice"
+toc: true
+...
 
-[VS Code](https://code.visualstudio.com/) + [Svelte](https://marketplace.visualstudio.com/items?itemName=svelte.svelte-vscode).
+## Introduzione
 
-## Need an official Svelte framework?
+### Idea
 
-Check out [SvelteKit](https://github.com/sveltejs/kit#readme), which is also powered by Vite. Deploy anywhere with its serverless-first approach and adapt to various platforms, with out of the box support for TypeScript, SCSS, and Less, and easily-added support for mdsvex, GraphQL, PostCSS, Tailwind CSS, and more.
+Persona Genius è un'applicazione per la creazione e gestione **collaborativa** di user personas, strumenti utilizzati nel campo del design e dello sviluppo per rappresentare i diversi tipi di utenti target di un prodotto o servizio. L'applicazione offre funzionalità per agevolare i piccoli team nella creazione delle user personas, sfruttando anche l'**intelligenza artificiale** (tramite delle chiamate API) per generarle.
 
-## Technical considerations
+### Implementazione
+Persona Genius è stato implementato utilizzando il framework Svelte. Per il backend, sono state utilizzate le Firebase Cloud Functions e il Firebase Realtime Database.
 
-**Why use this over SvelteKit?**
+## Funzionalità
+**Creazione e Modifica dei Progetti**
+Ogni utente può creare diversi progetti all'interno di Persona Genius. Ogni progetto può rappresentare un prodotto, come ad esempio un'applicazione, un sito web o un servizio. Durante la creazione del progetto, l'utente inserisce una **descrizione** che verrà utilizzata successivamente come prompt per l'intelligenza artificiale.
 
-- It brings its own routing solution which might not be preferable for some users.
-- It is first and foremost a framework that just happens to use Vite under the hood, not a Vite app.
+**Generazione di User Personas**
+Dopo aver creato un progetto, l'utente ha la possibilità di generare nuove User Personas utilizzando l'apposito pulsante. Quando viene premuto il bottone, viene inviata una richiesta API alla Firebase Cloud Function, che a sua volta effettua una **richiesta all'API di OpenAI**. Verrà quindi restituita una User Persona inventata dall'intelligenza artificiale basandosi sulla descrizione del progetto.
 
-This template contains as little as possible to get started with Vite + TypeScript + Svelte, while taking into account the developer experience with regards to HMR and intellisense. It demonstrates capabilities on par with the other `create-vite` templates and is a good starting point for beginners dipping their toes into a Vite + Svelte project.
+**Modifica delle User Personas**
+Una volta create, **le User Personas possono essere modificate** dall'utente secondo le necessità. Questo permette di personalizzare le personas in base alle caratteristiche specifiche dei utenti target del progetto.
 
-Should you later need the extended capabilities and extensibility provided by SvelteKit, the template has been structured similarly to SvelteKit so that it is easy to migrate.
+**Funzionalità Avanzate**
+Persona Genius è una Progressive Web Application (**PWA**). Inoltre, dispone di una **pagina di fallback** offline che viene mostrata in caso di mancanza di connessione. Nel caso di disconnessione improvvisa, invece, l'applicazione mostra un **indicatore "Offline"**, e quando la connessione viene ripristinata, Firebase cerca di sincronizzare i cambiamenti effettuati offline con il database.
+L'applicazione implementa anche le **notifiche**: se un utente si unisce a un progetto, il proprietario del progetto riceverà una notifica. 
 
-**Why `global.d.ts` instead of `compilerOptions.types` inside `jsconfig.json` or `tsconfig.json`?**
+### Funzionalità Collaborative
+Persona Genius permette agli utenti di **invitare altri collaboratori** ai propri progetti, facilitando così la collaborazione di team. Solo il proprietario del progetto ha il permesso di creare o cancellare inviti. Gli inviti sono costituiti da **un codice** con una scadenza di 3 giorni e possono essere accettati da chiunque. Nel momento in cui un utente inserisce il codice di invito, una cloud function gestisce in modo sicuro l'accettazione dell'invito, aggiungendo l'utente al progetto.
 
-Setting `compilerOptions.types` shuts out all other types not explicitly listed in the configuration. Using triple-slash references keeps the default TypeScript setting of accepting type information from the entire workspace, while also adding `svelte` and `vite/client` type information.
+## Backend
+Il backend di Persona Genius è composto da due componenti principali: il Realtime Database e le Firebase Cloud Functions.
 
-**Why include `.vscode/extensions.json`?**
+### Realtime Database
+Il Realtime Database è strutturato in tre nodi:
 
-Other templates indirectly recommend extensions via the README, but this file allows VS Code to prompt the user to install the recommended extension upon opening the project.
+- `projects`: Contiene i dati dei progetti, come la descrizione e le User Personas associate ad essi.
 
-**Why enable `allowJs` in the TS template?**
+- `users`: Contiene i dati degli utenti, inclusi il nome e gli ID dei progetti di cui sono proprietari o collaboratori.
 
-While `allowJs: false` would indeed prevent the use of `.js` files in the project, it does not prevent the use of JavaScript syntax in `.svelte` files. In addition, it would force `checkJs: false`, bringing the worst of both worlds: not being able to guarantee the entire codebase is TypeScript, and also having worse typechecking for the existing JavaScript. In addition, there are valid use cases in which a mixed codebase may be relevant.
+- `invites`: Contiene i dati degli inviti, inclusi i codici e le relative informazioni.
+  
+Esempio di schema:
 
-**Why is HMR not preserving my local component state?**
+````jsonc
 
-HMR state preservation comes with a number of gotchas! It has been disabled by default in both `svelte-hmr` and `@sveltejs/vite-plugin-svelte` due to its often surprising behavior. You can read the details [here](https://github.com/rixo/svelte-hmr#svelte-hmr).
+````
 
-If you have state that's important to retain within a component, consider creating an external store which would not be replaced by HMR.
+Il database è configurato con **regole di sicurezza** che permettono agli utenti di accedere solo ai progetti di cui sono proprietari o collaboratori e di modificare solo i dati relativi al proprio account.
 
-```ts
-// store.ts
-// An extremely simple external store
-import { writable } from 'svelte/store'
-export default writable(0)
+### Cloud Functions
+
+Persona Genius utilizza due Firebase Cloud Functions con il trigger **onRequest**, che vengono attivate quando un utente effettua una **richiesta HTTP**.
+
+- `acceptInvite`: Questa cloud function viene chiamata quando un utente desidera accettare un invito. La funzione verifica la validità del codice di invito e la sua non scadenza. Se il codice è valido, l'utente viene aggiunto al progetto, e i dati vengono **modificati nel database** in modo appropriato.
+
+- `generatePersona`: Questa cloud function viene chiamata quando un utente vuole generare una persona. La funzione effettua una chiamata all'**API di OpenAI utilizzando un token di autenticazione segreto**, nascosto in questo modo al client. La richiesta si basa su un prompt generato utilizzando la descrizione del progetto. Verrà quindi restituita una User Persona sotto forma di JSON, generata dall'intelligenza artificiale.
+
+esempio di richiesta e risposta:
+
+```jsonc
+
 ```
+
