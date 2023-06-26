@@ -12,7 +12,7 @@ notifications.requestPermission();
 
 // register service worker
 if ('serviceWorker' in navigator) {
-  navigator.serviceWorker.register('/utils/serviceworker.ts')
+  navigator.serviceWorker.register('src/utils/serviceworker.ts')
     .then(sw => {
       console.log('ServiceWorker registration successful: ', sw);
     })

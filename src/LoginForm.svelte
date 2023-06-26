@@ -9,7 +9,7 @@
     <article class="form-container">
         <span>
             <h1>Welcome to <br /> Persona Genius</h1>
-            <img src="src/assets/icons8-user-group-100.png" alt="logo" width="100" height="100">
+            <img src="/assets/icons8-user-group-100.png" alt="logo" width="100" height="100">
         </span>
 
 

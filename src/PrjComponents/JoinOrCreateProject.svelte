@@ -4,6 +4,7 @@
     import { usersDBStore } from "../stores/usersDBStore";
     import type { Project } from "../utils/interfaces";
     import { invitesStore } from "../stores/invitesStore";
+    import { v4 as uuidv4 } from 'uuid';
 
     export let joinDialogOpen: boolean;
 
@@ -18,7 +19,7 @@
             return;
         }
 
-        const newProjectId = crypto.randomUUID();
+        const newProjectId = uuidv4();
         const newProject: Project = {
             prjName: prjName,
             owner: uid,

@@ -21,7 +21,7 @@ async function send(title:string, body:string) {
 
   const notif: NotificationOptions = {
     body,
-    icon: 'public/pwa-icons/icon-192x192.png',
+    icon: 'assets/pwa-icons/icon-192x192.png',
   };
 
   if (Notification.permission === 'granted') {

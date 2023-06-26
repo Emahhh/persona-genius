@@ -3,7 +3,7 @@
     import { usersDBStore } from "./stores/usersDBStore";
     import {isOnline}from "./utils/offlineHandle";
     const currentUserStore = usersDBStore?.currentUser;
-    const displayName = $currentUserStore?.displayUsername ?? $userStore?.displayName ?? $userStore?.email;
+    const displayName = $currentUserStore.displayUsername ?? $userStore?.displayName ?? $userStore?.email;
     
 
 
@@ -14,12 +14,11 @@
         window.location.reload(); // reload to reset the state
     }
 </script>
-
 <!-- TODO: rename in LoggedNavbar ? -->
 
 <nav>
     <ul>
-        <li><img src="src/assets/icons8-user-group-100.png" alt="logo" width="50" height="50"></li>
+        <li><img src="/assets/icons8-user-group-100.png" alt="logo" width="50" height="50"></li>
         <li><strong>Persona Genius</strong></li>
 
         <!-- TODO: add logo-->

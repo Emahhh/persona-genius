@@ -4,6 +4,7 @@ import DEBUGMODE from "../DebugPanel.svelte";
 import type { Project, Persona } from "../utils/interfaces";
 import { userStore } from "./loginStore";
 import axios, { AxiosError } from "axios";
+import { v4 as uuidv4 } from 'uuid';
 
 export interface Invitation {
     projectId: string;
@@ -49,7 +50,7 @@ async function createInvite(projectId: string, projectName: string, expiration: 
         throw new Error(`User ${uid} is not the owner of project ${projectId}`);
     }
 
-    const inviteUID: string = crypto.randomUUID();
+    const inviteUID: string = uuidv4();
     const invite: Invitation = {
         projectId: projectId,
         projectName: projectName ?? "Unknown",

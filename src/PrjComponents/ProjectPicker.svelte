@@ -38,7 +38,7 @@
     <!-- svelte-ignore a11y-click-events-have-key-events -->
     <div class="project new-project" on:click={() => handleAddButton()}>
         <span class="projectName">
-            <img src="/src/assets/add-circle-fill.svg" alt="add" width="50px" height="50px" />
+            <img src="/assets/add-circle-fill.svg" alt="add" width="50px" height="50px" />
         </span> 
 
         <br />

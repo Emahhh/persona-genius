@@ -93,7 +93,7 @@
             {#each Object.keys($selectedProject.sentInvites) as inviteCode}
                 <li><code>{inviteCode}</code>
                     <a href="#" on:click={() => navigator.clipboard.writeText(inviteCode)}>Copy
-                        <img src="/src/assets/clipboard.svg" alt="Copy to clipboard" />
+                        <img src="/assets/clipboard.svg" alt="Copy to clipboard" />
                     </a>
                     - 
                     <a href="#" on:click={() => invitesStore.deleteInvite(inviteCode)}>Delete</a>

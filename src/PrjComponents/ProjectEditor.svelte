@@ -14,6 +14,8 @@
     import { generatePersona } from "../utils/apiRequests";
     import PersonaEditor from "./PersonaEditor.svelte";
     import { bind } from "svelte/internal";
+    import { v4 as uuidv4 } from "uuid";
+
 
     let selectedPersonaId: string | undefined = undefined;
     let selectedPersona: Persona | undefined = undefined;
@@ -73,7 +75,7 @@
             return;
         }
 
-        const newPersonaId = crypto.randomUUID();
+        const newPersonaId = uuidv4();
         setPersona($selectedProjectId, newPersonaId, myNewPersona);
         selectedPersonaId = newPersonaId;
         isLoading = false;
@@ -103,13 +105,13 @@
 
 <header class="panel-bar">
     <a  href="#" on:click={() => selectedProjectId.set(undefined)}  >   
-        <img src="/src/assets/arrow-go-back-line.svg" alt="go back" width="20px" height="20px" />
+        <img src="/assets/arrow-go-back-line.svg" alt="go back" width="20px" height="20px" />
         Choose another project   
     </a> 
     <h5>You are editing <i>{$selectedProject?.prjName}</i></h5>
     <a  href="#" on:click={() => infoEditMode = true}>
         Edit project info
-        <img src="/src/assets/file-edit-line.svg" alt="edit" width="20px" height="20px" />
+        <img src="/assets/file-edit-line.svg" alt="edit" width="20px" height="20px" />
     </a>
 </header>
 
@@ -124,13 +126,13 @@
 
                 {#if isLoading}
                     <div class="persona-item add-new-persona" aria-busy="true">
-                        <img src="/src/assets/user-add-line.svg" alt="edit" width="20px" height="20px" />
+                        <img src="/assets/user-add-line.svg" alt="edit" width="20px" height="20px" />
                         Add new persona
                     </div>
                 {:else}
                     <!-- svelte-ignore a11y-click-events-have-key-events -->
                     <div class="persona-item add-new-persona" on:click={() => handleCreateNewPersona() }  data-placement="bottom" data-tooltip="Uses AI. Based on project description." style="border: none;">
-                        <img src="/src/assets/user-add-line.svg" alt="edit" />
+                        <img src="/assets/user-add-line.svg" alt="edit" />
                         Add new persona
                     </div>
                 {/if}
@@ -172,7 +174,7 @@
                             <h3>{selectedPersona.name}</h3>
                             <a class="edit-button" role="button" href="#" on:click={() => editPersonaMode = true}>
                                 Edit this Persona
-                                <img src="/src/assets/edit-2-line.svg" alt="edit" width="20px" height="20px"  />
+                                <img src="/assets/edit-2-line.svg" alt="edit" width="20px" height="20px"  />
 
                             </a>
                         </div>
