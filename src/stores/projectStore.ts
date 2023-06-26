@@ -258,7 +258,7 @@ function checkProjectRights(prj: Project):boolean {
  * @param newProj the project after the update
  */
 async function notifyIfNewCollaborators(oldProj: Project, newProj: Project){
-
+    if(!newProj || !oldProj) return;
     if(!oldProj.collaborators) oldProj.collaborators = {};
     if(!newProj.collaborators) newProj.collaborators = {};
 

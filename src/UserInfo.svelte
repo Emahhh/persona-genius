@@ -3,7 +3,7 @@
     import { usersDBStore } from "./stores/usersDBStore";
     import {isOnline}from "./utils/offlineHandle";
     const currentUserStore = usersDBStore?.currentUser;
-    const displayName = $currentUserStore?.displayUsername ?? $userStore?.displayName ?? $userStore?.email ?? "unknown";
+    const displayName = $currentUserStore?.displayUsername ?? $userStore?.displayName ?? $userStore?.email;
     
 
 
