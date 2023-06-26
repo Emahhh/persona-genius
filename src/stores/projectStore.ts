@@ -5,6 +5,7 @@ import DEBUGMODE from "../DebugPanel.svelte";
 import type { Project, Persona } from "../utils/interfaces";
 import { usersDBStore } from "./usersDBStore";
 import { userStore } from "./loginStore";
+import { notifications } from "../utils/notifications";
 
 // STORES
 export const projectsStore = writable<Record<string, Project>>({});
@@ -53,6 +54,8 @@ usersDBStore.userProjectsList.subscribe((newUserProjectsList) => {
                 });
                 return;
             }
+
+            notifyIfNewCollaborators(getStore(projectsStore)[projectId], projectValue);
 
             projectsStore.update((projects) => {
                 projects[projectId] = projectValue;
@@ -249,6 +252,31 @@ function checkProjectRights(prj: Project):boolean {
     return false;
 }
 
+/**
+ * Detects if a new collaborator has been added to the project. Id there are, send a notification to the user.
+ * @param oldProj the project before the update
+ * @param newProj the project after the update
+ */
+async function notifyIfNewCollaborators(oldProj: Project, newProj: Project){
+
+    if(!oldProj.collaborators) oldProj.collaborators = {};
+    if(!newProj.collaborators) newProj.collaborators = {};
+
+    const oldCollaborators = Object.keys(oldProj.collaborators);
+    const newCollaborators = Object.keys(newProj.collaborators);
+
+    const newCollaboratorsIds = newCollaborators.filter((id) => !oldCollaborators.includes(id));
+
+    if(newCollaboratorsIds.length > 0){
+        const newCollaboratorsNames = await Promise.all(newCollaboratorsIds.map(async (id) => {
+            return await usersDBStore.getUsername(id) ?? 'unknown';
+        }));
+
+        const newCollaboratorsNamesString = newCollaboratorsNames.join(', ');
+
+        notifications.send("New collaborators added!", `${newCollaboratorsNamesString} have been added to the project ${newProj.prjName}.`);
+    }
+}
 
 
 

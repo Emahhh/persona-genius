@@ -25,8 +25,7 @@
             console.error("Error while inviting: no uid returned");
             return;
         }
-        //alert("Invite link: " + window.location.origin + "/#/invite/" + uid);
-        alert("Invite code: " + uid);
+        //TODO: farlo con link? alert("Invite link: " + window.location.origin + "/#/invite/" + uid);
     }
 
 
