@@ -19,6 +19,11 @@
             return;
         }
 
+        if (!prjName || prjName === "" || !prjDescription || prjDescription === "") {
+            alert("Please fill in all fields!");
+            return;
+        }
+
         const newProjectId = uuidv4();
         const newProject: Project = {
             prjName: prjName,
@@ -112,6 +117,7 @@
                             bind:value={prjDescription}
                             placeholder=""
                             autocomplete="off"
+
                         ></textarea>
 
                         <details>
