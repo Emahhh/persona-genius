@@ -59,6 +59,48 @@ Il Realtime Database è strutturato in tre nodi:
 Esempio di schema:
 
 ````jsonc
+{
+
+  "invites": {
+    "inviteID-07cc-4dfc-8b44": {
+      "exp": "999",
+      "prjID": "999",
+      "prjName": "Prova",
+      "senderUID": "uidpersona-07cc-4dfc-8b44"
+    }
+  },
+
+  "projects": {
+    "09b5e0d5-21b2-41a4-a352-d45d9472cfd2": {
+      "owner": "ScWr1bpNiIYWZ4FoBRiZvRJHPGD2",
+      "desc": "...",
+      "name": "New Project",
+      "personas": {
+        "4b183376-07cc-4dfc-8b44-9ccfe9cef1ef": {
+          "desc": "...",
+          "frustrations": "...",
+          "goals": "...",
+          "image": "https://...",
+          "job": "...",
+          "name": "...",
+          "needs": "..."
+        }
+      }
+    }
+  },
+
+  "users": {
+    "3dBvVut6XWYPsgm8I3iFBocB3Ri2": {
+      "displayName": "Emanuele Buonaccorsi",
+      "projects": {
+        "dc9c8ee6-d262-45a4-a1d5-e674ca906f38": true,
+        "09b5e0d5-21b2-41a4-a352-d4589472cfd2": true
+      }
+    }
+  }
+
+}
+
 
 ````
 
@@ -67,14 +109,25 @@ Il database è configurato con **regole di sicurezza** che permettono agli utent
 ### Cloud Functions
 
 Persona Genius utilizza due Firebase Cloud Functions con il trigger **onRequest**, che vengono attivate quando un utente effettua una **richiesta HTTP**.
+Sono testabili in locale con l'ausilio di [Firebase Emulators](https://firebase.google.com/docs/functions/get-started?gen=2nd#set-up-your-environment-and-the-firebase-cli).
 
 - `acceptInvite`: Questa cloud function viene chiamata quando un utente desidera accettare un invito. La funzione verifica la validità del codice di invito e la sua non scadenza. Se il codice è valido, l'utente viene aggiunto al progetto, e i dati vengono **modificati nel database** in modo appropriato.
 
 - `generatePersona`: Questa cloud function viene chiamata quando un utente vuole generare una persona. La funzione effettua una chiamata all'**API di OpenAI utilizzando un token di autenticazione segreto**, nascosto in questo modo al client. La richiesta si basa su un prompt generato utilizzando la descrizione del progetto. Verrà quindi restituita una User Persona sotto forma di JSON, generata dall'intelligenza artificiale.
 
-esempio di richiesta e risposta:
-
+esempio di richiesta sottoposta a `generatePersona`:
 ```jsonc
-
+const prompt = "You will generate a JSON representing a UX persona. Your response MUST be valid JSON. Your response can only contain JSON, nothing more. And it must include these fields. They are all strings: name, description, goals, needs, frustrations, job. You will complete these field inventing an effective and useful persona for a project with the following description: a collaborative web app that helps teams generate user personas with ai"
 ```
 
+e relativa risposta:
+```jsonc
+{
+    "description": "Alicia is a curious and detail-orientated UX researcher who works for a tech company in San Francisco.",
+    "name": "Alicia Nguyen", 
+    "goals": "Alicias primary goal is to help her team create detailed user ...",
+    "needs": "Alicias key needs include a collaborative platform where her team can ...",
+    "frustrations": "Alicia is frustrated by outdated tools and conventional...",
+    "job": "As a UX researcher, Alicia needs to be able to provide in-depth..."
+}
+```
