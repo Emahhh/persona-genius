@@ -3,7 +3,6 @@
     import { usersDBStore } from "./stores/usersDBStore";
     import {isOnline}from "./utils/offlineHandle";
     const currentUserStore = usersDBStore?.currentUser;
-    const displayName = $currentUserStore.displayUsername ?? $userStore?.displayName ?? $userStore?.email;
     
 
 
@@ -31,7 +30,7 @@
         </li>
     </ul>
     <ul>
-        <i> { displayName} </i>
+        <i> { $currentUserStore.displayUsername ?? $userStore?.displayName ?? $userStore?.email } </i>
         <li>
             <a href="#" role="button" class="secondary" on:click={handleLogout}>Logout</a>
         </li>
