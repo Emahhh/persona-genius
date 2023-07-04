@@ -1,4 +1,4 @@
----
+<!-- ---
 # compila pdf con:
 # pandoc readme.md -o relazione.pdf --from markdown --template eisvogel --listings
 titlepage: true
@@ -16,7 +16,13 @@ titlepage-rule-height: 0
 toc-own-page: true
 toc-title: "Indice"
 toc: true
-...
+... -->
+
+# Persona Genius
+
+A project for my Web App Development course at the University of Pisa.
+Implemented using Svelte and Firebase.
+Try it live at: <https://saw-prova.web.app/>. 
 
 ## Introduzione
 

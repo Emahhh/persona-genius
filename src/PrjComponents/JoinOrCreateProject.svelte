@@ -33,9 +33,10 @@
             collaborators: {},
             sentInvites: {},
         };
-
+        
+        usersDBStore.addPrjToUser(uid, newProjectId);
         try {
-            await editProject(newProjectId, newProject);
+            await editProject(newProjectId, newProject); // bug ?
         } catch (error:any) {
             alert("Error while creating project: " + error.message);
             console.error("Error while creating project:", error);
@@ -43,7 +44,6 @@
             return;
         }
 
-        usersDBStore.addPrjToUser(uid, newProjectId);
         console.log("new project id: ", newProjectId);
         selectedProjectId.set(newProjectId);
     }
