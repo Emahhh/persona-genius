@@ -20,8 +20,7 @@ toc: true
 
 # Persona Genius
 
-A project for my Web App Development course at the University of Pisa.
-Implemented using Svelte and Firebase.
+A collaborative web app to generate and edit User Personas. Implemented using Svelte and Firebase.
 Try it live at: <https://saw-prova.web.app/>. 
 
 ## Introduzione
