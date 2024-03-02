@@ -20,8 +20,15 @@ toc: true
 
 # Persona Genius
 
+The first web app I've ever built!
 A collaborative web app to generate and edit User Personas. Implemented using Svelte and Firebase.
 Try it live at: <https://saw-prova.web.app/>. 
+
+| Login | Generation | Collaboration |
+|--------------|--------------|--------------|
+| ![login](https://github.com/Emahhh/persona-genius-saw/assets/27818313/1540b8d6-f898-4a68-a282-b9b47306f259) | ![generating](https://github.com/Emahhh/persona-genius-saw/assets/27818313/113ec948-6819-4546-9804-35014c750c4f) | ![collab](https://github.com/Emahhh/persona-genius-saw/assets/27818313/c56a049d-3c31-49db-be80-2ef3ec9e0313) |
+
+
 
 ## Introduzione
 
